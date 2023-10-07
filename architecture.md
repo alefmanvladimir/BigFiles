@@ -100,6 +100,8 @@ classDiagram
 5. Backend stores file metadata in the smart contract
 6. Backend returns file metadata to the user
 
+> When file is handled by the Storage Provider, backend can delete local copy of the file.
+
 ```mermaid
 ---
 title: Uploading files
@@ -148,4 +150,27 @@ sequenceDiagram
         FDB-->>-Frontend: File metadata
     end
     Frontend->>Frontend: Display files metadata
+```
+
+### Downloading files
+
+1. If `bagId` or `filename` are unknown, Frontend requests file metadata from the Files Database
+2. Frontend downloads file from the TON Storage by URL
+
+```mermaid
+---
+title: Downloading files
+---
+sequenceDiagram
+    participant Frontend
+    participant TS as TON Storage
+    participant FDB as Files Database
+
+    alt bagId or filename are unknown
+        Frontend->>+FDB: Get file metadata
+        FDB-->>-Frontend: File metadata
+    end
+
+    Frontend->>+TS: Download file by URL
+    TS-->>-Frontend: File
 ```
