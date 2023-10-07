@@ -174,3 +174,9 @@ sequenceDiagram
     Frontend->>+TS: Download file by URL
     TS-->>-Frontend: File
 ```
+
+## Possible problems
+
+1. **Privacy**: TON Storage is a public network, so anyone can download your files if they know `bagId` and `filename`. 
+   
+   > **Added by GitHub Copilot**: We can solve this problem by encrypting files before uploading them to the TON Storage. In this case only users with decryption keys will be able to download files.
