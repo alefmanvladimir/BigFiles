@@ -88,3 +88,41 @@ classDiagram
     TonDriveMaster "1" o-- "*" TonDrivePersonalDrive
     TonDrivePersonalDrive "1" o-- "*" TonDriveFile
 ```
+
+## User Stories
+
+### Uploading files
+
+1. User uploads file to the backend
+2. Backend shares file with the TON Storage participants
+3. Backend extracts file metadata
+4. Backend creates smart contract with TON Storage Provider for storing file in the TON Storage
+5. Backend stores file metadata in the smart contract
+6. Backend returns file metadata to the user
+
+```mermaid
+---
+title: Uploading files
+---
+sequenceDiagram
+    participant Frontend
+    participant Backend
+    participant TS as TON Storage
+    participant TSP as TON Storage Provider
+    participant FDB as Files Database
+
+    Frontend->>+Backend: Upload file
+    Backend->>TS: Share file
+    Backend->>Backend: Extract file metadata
+    Backend->>+TSP: Create file storage contract
+    TSP-->>-Backend: File storage contract address
+    Backend->>+FDB: Store file metadata
+    FDB-->>-Backend: File metadata stored
+    Backend-->>-Frontend: File metadata
+
+    loop Every 24 hours
+        alt File is handled by storage provider
+            Backend->>Backend: Delete local copy of the file
+        end
+    end
+```
