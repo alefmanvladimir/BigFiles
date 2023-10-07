@@ -126,3 +126,26 @@ sequenceDiagram
         end
     end
 ```
+
+### Browsing files
+
+1. Frontend requests drive metadata from the Files Database
+2. Frontend requests file metadata for each file in drive from the Files Database
+3. Frontend displays files metadata to the user
+
+```mermaid
+---
+title: Browsing files
+---
+sequenceDiagram
+    participant Frontend
+    participant FDB as Files Database
+
+    Frontend->>+FDB: Get drive metadata
+    FDB-->>-Frontend: Drive metadata
+    par for each file in drive
+        Frontend->>+FDB: Get file metadata
+        FDB-->>-Frontend: File metadata
+    end
+    Frontend->>Frontend: Display files metadata
+```
