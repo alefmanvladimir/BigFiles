@@ -89,6 +89,17 @@ classDiagram
     TonDrivePersonalDrive "1" o-- "*" TonDriveFile
 ```
 
+## Light Architecture
+
+While we are making first steps in development, it is possible to use only the backend server as TON storage for the whole system.
+
+In this case:
+
+1. Backend doesn't create smart contract for Storage Provider
+2. Backend keeps all files in drive and doesn't delete them
+
+![Architecture Light](./images/architecture-light.jpg)
+
 ## User Stories
 
 ### Uploading files
