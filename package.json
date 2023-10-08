@@ -2,9 +2,9 @@
   "name": "ton-drive",
   "private": true,
   "workspaces": [
-    "frontend",
-    "backend",
-    "contracts"
+    "ton-drive-frontend",
+    "ton-drive-backend",
+    "ton-drive-contracts"
   ],
   "devDependencies": {
     "turbo": "^1.10.15"
