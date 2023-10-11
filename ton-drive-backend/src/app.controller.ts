@@ -1,19 +1,18 @@
-import {Controller, Get, Post, Query, Req, Res, UploadedFile, UseInterceptors} from '@nestjs/common';
-import {AppService} from './app.service';
-import {FileInterceptor} from "@nestjs/platform-express";
-import * as fs from "fs";
-import * as os from "os";
-import * as path from "path";
-import {TonStorageService} from "./ton-storage.service";
-import {Response} from "express";
+import { Controller, Get, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { AppService } from './app.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import { TonStorageService } from './ton-storage.service';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly tonStorageService: TonStorageService
-  ) {
-  }
+    private readonly tonStorageService: TonStorageService,
+  ) {}
 
   @Get()
   getHello(): string {
@@ -24,19 +23,15 @@ export class AppController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    let tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "upload"))
-    fs.writeFileSync(`${tempDir}/${file.originalname}`, file.buffer)
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'upload'));
+    fs.writeFileSync(`${tempDir}/${file.originalname}`, file.buffer);
 
-    return this.tonStorageService.createBag(`${tempDir}/${file.originalname}`)
+    return this.tonStorageService.createBag(`${tempDir}/${file.originalname}`);
   }
 
   @Post('contracts')
-  async createNewContract(
-    @Query('bagId') bagId: string,
-    @Query('providerAddress') provider: string,
-    @Res() response: Response
-  ) {
-    const data = await this.tonStorageService.createContract(bagId, provider)
-    response.send(data)
+  async createNewContract(@Query('bagId') bagId: string, @Query('providerAddress') provider: string, @Res() response: Response) {
+    const data = await this.tonStorageService.createContract(bagId, provider);
+    response.send(data);
   }
 }
