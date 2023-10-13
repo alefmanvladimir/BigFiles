@@ -2,6 +2,7 @@ import "./App.css";
 import styled from "styled-components";
 import "@twa-dev/sdk";
 import DemoPage from "./pages/DemoPage";
+import FilesListPage from "./pages/FilesListPage";
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -24,7 +25,7 @@ function App() {
   return (
     <StyledApp>
       <AppContainer>
-        <DemoPage />
+        <FilesListPage />
       </AppContainer>
     </StyledApp>
   );
