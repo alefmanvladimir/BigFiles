@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { TonStorageFile } from "../../../entities/file/model/TonStorageFile";
+import type { TonStorageFile } from "../../src/entities/file/model/TonStorageFile";
 
 export function useUserFiles(): TonStorageFile[] {
   const [files, setFiles] = useState<TonStorageFile[]>([]);
