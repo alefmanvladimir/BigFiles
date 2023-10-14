@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import "./App.css";
 import styled from "styled-components";
 import "@twa-dev/sdk";
@@ -23,11 +24,13 @@ const AppContainer = styled.div`
 
 function App() {
   return (
-    <StyledApp>
-      <AppContainer>
-        <FilesListPage />
-      </AppContainer>
-    </StyledApp>
+    <StrictMode>
+      <StyledApp>
+        <AppContainer>
+          <FilesListPage />
+        </AppContainer>
+      </StyledApp>
+    </StrictMode>
   );
 }
 
