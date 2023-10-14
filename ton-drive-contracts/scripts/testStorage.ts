@@ -5,7 +5,7 @@ import * as path from "path";
 
 export async function run(provider: NetworkProvider) {
   //https://ndatg.github.io/tonstorage-dapp/#
-  const addr = Address.parse("UQCYNSSutUKJRWI9VgZqpSkBz5E3tfSh60g0SBDxwSP5hakL")
+  const addr = Address.parse(`${process.env.TON_STORAGE_PROVIDER_ADDRESS}`)
 
   const sampleFileContent = `Test file with random content ${new Date()}`
 
@@ -20,7 +20,7 @@ export async function run(provider: NetworkProvider) {
     "test-file.txt"
   );
 
-  const bagId = await fetch("http://159.223.4.194:3000/upload", {
+  const bagId = await fetch(`${process.env.TON_STORAGE_BACKEND_HOST}/upload`, {
     method: "POST",
     body: formData
   })
@@ -30,7 +30,7 @@ export async function run(provider: NetworkProvider) {
 
   console.log(`Bag ID: ${bagId}`)
 
-  const contractFile = await fetch(`http://159.223.4.194:3000/contracts?bagId=${bagId}&providerAddress=${addr.toRawString()}`, {
+  const contractFile = await fetch(`${process.env.TON_STORAGE_BACKEND_HOST}/contracts?bagId=${bagId}&providerAddress=${addr.toRawString()}`, {
     method: "POST"
   })
     .then(res => res.arrayBuffer())

@@ -1,4 +1,4 @@
-import { parseCreateCmdOutput } from './ton-storage.service';
+import { TonStorageService } from './ton-storage.service';
 
 describe('TonStorage', () => {
   describe('parse create cmd out', () => {
@@ -14,7 +14,7 @@ CreatedFromNest
 Downloaded: 67KB/67KB (completed)
 Dir name:`;
 
-      expect(parseCreateCmdOutput(out)).toBe('8A3BFBAC38A688322EC507C06F90D5FA74DEECEEEB2E40666D25DA89291F4930');
+      expect(TonStorageService.parseCreateCmdOutput(out)).toBe('8A3BFBAC38A688322EC507C06F90D5FA74DEECEEEB2E40666D25DA89291F4930');
     });
   });
 });

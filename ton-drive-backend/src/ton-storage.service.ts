@@ -5,20 +5,19 @@ import * as os from 'os';
 import * as path from 'path';
 import * as process from 'process';
 
-export function parseCreateCmdOutput(out: string): string | null {
-  if (out.indexOf('Bag created') == -1) {
-    return null;
-  }
-  const regex = /BagID = (?<bagId>.{64})/;
-  const res = out.match(regex);
-
-  return res ? res.groups['bagId'] : null;
-}
-// STORAGE_CLI_EXEC_PATH=./ton-win-x86-64/storage-daemon-cli.exe
-// STORAGE_WORK_DIR=C:\Users\User_Name\Folder
-// USE_SHELL=false
 @Injectable()
 export class TonStorageService {
+
+  static parseCreateCmdOutput(out: string): string | null {
+    if (out.indexOf('Bag created') == -1) {
+      return null;
+    }
+    const regex = /BagID = (?<bagId>.{64})/;
+    const res = out.match(regex);
+
+    return res ? res.groups['bagId'] : null;
+  }
+
   async createBag(filePath1: string): Promise<{ bagId: string } | string> {
     const filePath = filePath1.replace(/\\/g, '/');
     console.log('FILE PATH', filePath);
@@ -49,7 +48,7 @@ export class TonStorageService {
         if (code != 0) {
           reject('Failed');
         }
-        const bagId = parseCreateCmdOutput(consoleOut.toString());
+        const bagId = TonStorageService.parseCreateCmdOutput(consoleOut.toString());
         if (bagId) {
           resolve({ bagId });
         } else {
