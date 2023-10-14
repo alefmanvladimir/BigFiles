@@ -4,4 +4,5 @@ export interface TonStorageFile {
   /** File size in bytes */
   size: number;
   bagId: string;
+  date: Date;
 }

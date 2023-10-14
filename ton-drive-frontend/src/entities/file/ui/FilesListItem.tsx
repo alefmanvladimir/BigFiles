@@ -1,5 +1,6 @@
 import type { TonStorageFile } from "../model/TonStorageFile"
 import FileSize from "./FileSize"
+import FileDate from "./FileDate"
 
 export interface FilesListItemProps {
   file: TonStorageFile
@@ -21,6 +22,7 @@ export default function FilesListItem({ file, className, actions }: FilesListIte
           {file.name}.{file.extension}
           <div className="badge badge-neutral"><FileSize size={file.size} /></div>
         </div>
+        <div className="text-neutral-content text-sm"><FileDate date={file.date} /></div>
         <span className="text-neutral-content text-sm">{file.bagId}</span>
       </div>
       {/* Actions */}

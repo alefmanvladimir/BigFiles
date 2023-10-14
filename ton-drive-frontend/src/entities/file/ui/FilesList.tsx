@@ -13,8 +13,8 @@ export default function FilesList({ files, className, createActions }: FilesList
   const memoizedCreateActions = useCallback(createActions ?? defaultCreateActions, [createActions, files])
   return (
     <ul className={`${className ?? ''}`}>
-      {files.map((file) => (
-        <FilesListItem className="my-3" file={file} actions={memoizedCreateActions(file)} />
+      {files.map((file, index) => (
+        <FilesListItem key={index} className="my-3" file={file} actions={memoizedCreateActions(file)} />
       ))}
     </ul>
   )
