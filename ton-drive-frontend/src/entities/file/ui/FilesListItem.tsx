@@ -17,10 +17,10 @@ export default function FilesListItem({ file, className, actions }: FilesListIte
       </div>
       <div className="text-ellipsis overflow-hidden">
         <div className="card-title">
-          {file.name}.{file.extension}
-          <div className="badge badge-neutral"><FileSize size={file.size} /></div>
+          {file.name}
+          <div className="badge badge-neutral">{file.extension}</div>
         </div>
-        <div className="text-neutral-content text-sm"><FileDate date={file.date} /></div>
+        <div className="text-neutral-content text-sm"><FileSize size={file.size} /> | <FileDate date={file.date} /></div>
         <span className="text-neutral-content text-sm">{file.bagId}</span>
       </div>
       {/* Actions */}
