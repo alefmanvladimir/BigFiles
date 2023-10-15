@@ -22,18 +22,38 @@ export default function FilesSortControls({ files, onSort, className = '' }: Fil
     setSortAttribute(null)
   }, [files])
 
+  const buttons: {
+    sortAttribute: SortAttribute,
+    text: string
+  }[] = [
+    { sortAttribute: 'date', text: 'Date' },
+    { sortAttribute: 'name', text: 'Name' },
+    { sortAttribute: 'size', text: 'Size' },
+  ]
+
+  function getAsc(sortAttribute: SortAttribute): boolean {
+    switch (sortAttribute) {
+      case 'date':
+        return areDatesAscending
+      case 'name':
+        return areNamesAscending
+      case 'size':
+        return areSizesAscending
+    }
+  }
+
   return (
     <>
       <div className={`join ${className}`}>
-        <button className={`btn btn-sm join-item ${sortAttribute === 'date' ? 'btn-active btn-accent' : ''}`} onClick={() => onButtonClick('date')}>
-          <SortOrderIcon asc={areDatesAscending} /> Date
-        </button>
-        <button className={`btn btn-sm join-item ${sortAttribute === 'name' ? 'btn-active btn-accent' : ''}`} onClick={() => onButtonClick('name')}>
-          <SortOrderIcon asc={areNamesAscending} /> Name
-        </button>
-        <button className={`btn btn-sm join-item ${sortAttribute === 'size' ? 'btn-active btn-accent' : ''}`} onClick={() => onButtonClick('size')}>
-          <SortOrderIcon asc={areSizesAscending} /> Size
-        </button>
+        {
+          buttons.map((buttonModel) => (
+            <button key={buttonModel.sortAttribute}
+                    className={`btn btn-sm sm:btn-md join-item ${sortAttribute === buttonModel.sortAttribute ? 'btn-active btn-accent' : ''}`}
+                    onClick={() => onButtonClick(buttonModel.sortAttribute)}>
+              <SortOrderIcon asc={getAsc(buttonModel.sortAttribute)} /> {buttonModel.text}
+            </button>
+          ))
+        }
       </div>
     </>
   )

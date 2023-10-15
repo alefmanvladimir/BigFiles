@@ -15,11 +15,14 @@ export default function FilesNavigation() {
   }, [files])
   return (
     <>
-      <FilesSearchBox className="my-2" files={files} onSearch={(foundFiles) => {
-          setFilteredFiles(foundFiles)
-          setDisplayedFiles(foundFiles)
-        }} />
-      <FilesSortControls className="my-2" files={filteredFiles} onSort={(sortedFiles) => setDisplayedFiles(sortedFiles)} />
+      <div className="my-2 flex gap-2 flex-wrap flex-col sm:flex-row">
+        <FilesSearchBox files={files} onSearch={(foundFiles) => {
+            setFilteredFiles(foundFiles)
+            setDisplayedFiles(foundFiles)
+          }} />
+        <FilesSortControls files={filteredFiles}
+            onSort={(sortedFiles) => setDisplayedFiles(sortedFiles)} />
+      </div>
       <FilesListWithActions files={displayedFiles} />
     </>
   )
