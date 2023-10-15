@@ -1,9 +1,9 @@
 import { TonConnectButton } from "@tonconnect/ui-react";
-import { Counter } from "../components/Counter";
-import { Jetton } from "../components/Jetton";
-import { TransferTon } from "../components/TransferTon";
-import { Button, FlexBoxCol, FlexBoxRow } from "../components/styled/styled";
-import { useTonConnect } from "../hooks/useTonConnect";
+import { Counter } from "../features/demo/ui/Counter";
+import { Jetton } from "../features/demo/ui/Jetton";
+import { TransferTon } from "../features/demo/ui/TransferTon";
+import { Button, FlexBoxCol, FlexBoxRow } from "../shared/ui/styled";
+import { useTonConnect } from "../shared/hooks/useTonConnect";
 import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
 
