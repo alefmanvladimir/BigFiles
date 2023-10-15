@@ -13,7 +13,7 @@ export default function FilesSearchBox({ files, onSearch, className = '' }: File
   const [searchQuery, setSearchQuery] = useState('')
 
   function searchFiles (query: string) {
-    const foundFiles = query ? files.filter(file => file.name.includes(query)) : files
+    const foundFiles = query ? files.filter(file => file.name.includes(query)) : [...files]
     if (onSearch) {
       onSearch(foundFiles)
     }
