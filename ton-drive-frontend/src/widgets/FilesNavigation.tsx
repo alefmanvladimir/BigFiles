@@ -7,15 +7,20 @@ import { useUserFiles } from "./hooks/useUserFile";
 
 export default function FilesNavigation() {
   const files = useUserFiles()
-  const [sortedFiles, setSortedFiles] = useState(files)
+  const [filteredFiles, setFilteredFiles] = useState(files)
+  const [displayedFiles, setDisplayedFiles] = useState(files)
   useEffect(() => {
-    setSortedFiles(files)
+    setFilteredFiles(files)
+    setDisplayedFiles(files)
   }, [files])
   return (
     <>
-      <FilesSearchBox className="my-2" />
-      <FilesSortControls className="my-2" files={files} onSort={(sortedFiles) => setSortedFiles(sortedFiles)} />
-      <FilesListWithActions files={sortedFiles} />
+      <FilesSearchBox className="my-2" files={files} onSearch={(foundFiles) => {
+          setFilteredFiles(foundFiles)
+          setDisplayedFiles(foundFiles)
+        }} />
+      <FilesSortControls className="my-2" files={filteredFiles} onSort={(sortedFiles) => setDisplayedFiles(sortedFiles)} />
+      <FilesListWithActions files={displayedFiles} />
     </>
   )
 }

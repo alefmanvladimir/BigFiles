@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { TonStorageFile } from "../../../entities/file/model/TonStorageFile"
 
 export interface FilesSortControlProps {
@@ -14,6 +14,13 @@ export default function FilesSortControls({ files, onSort, className = '' }: Fil
   const [areNamesAscending, setAreNamesAscending] = useState(true)
   const [areSizesAscending, setAreSizesAscending] = useState(true)
   const [sortAttribute, setSortAttribute] = useState<SortAttribute | null>(null)
+
+  useEffect(() => {
+    setAreDatesAscending(false)
+    setAreNamesAscending(true)
+    setAreSizesAscending(true)
+    setSortAttribute(null)
+  }, [files])
 
   return (
     <>
