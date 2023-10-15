@@ -26,12 +26,8 @@ export default function FilesSearchBox({ files, onSearch, className = '' }: File
 
   return (
     <form className={`join ${className}`} onSubmit={onSubmit}>
-      <div>
-        <div>
-          <input className="input input-bordered join-item" placeholder="Search"
-                 value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} />
-        </div>
-      </div>
+      <input className="input input-bordered join-item" placeholder="Search"
+              value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} />
       <div className="indicator">
         { isNew ? <span className="indicator-item badge badge-accent">new</span> : null }
         <button className="btn join-item" type="submit">
