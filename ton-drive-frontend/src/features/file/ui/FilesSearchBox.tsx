@@ -8,6 +8,8 @@ export interface FilesSearchBoxProps {
 }
 
 export default function FilesSearchBox({ files, onSearch, className = '' }: FilesSearchBoxProps) {
+  const isNew = false
+
   const [searchQuery, setSearchQuery] = useState('')
 
   function searchFiles (query: string) {
@@ -31,7 +33,7 @@ export default function FilesSearchBox({ files, onSearch, className = '' }: File
         </div>
       </div>
       <div className="indicator">
-        <span className="indicator-item badge badge-accent">new</span>
+        { isNew ? <span className="indicator-item badge badge-accent">new</span> : null }
         <button className="btn join-item" type="submit">
           {/* magnifying-glass */}
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
