@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import FilesListWithActions from "../features/file/ui/FilesListWithActions";
 import FilesSortControls from "../features/file/ui/FilesSortControls";
 import FilesSearchBox from "../features/file/ui/FilesSearchBox";
-import { useUserFiles } from "./hooks/useUserFile";
+import { useUserFiles } from "./hooks/useUserFiles";
 
 export default function FilesNavigation() {
   const files = useUserFiles()
