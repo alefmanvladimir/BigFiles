@@ -6,7 +6,19 @@ services:
 
   backend:
     build: ./Dockerfile
-    ports:
-      - "80:3000"
     depends_on:
       - daemon
+
+  https-portal:
+    image:  steveltn/https-portal:1
+    ports:
+        - "80:80"
+        - "443:443"
+    restart: always
+    environment:
+        # TODO: Replace localhost with your domain name or server IP
+        DOMAINS:  "localhost -> http://backend:3000"
+        # STAGE: 'production' # Don't use production until staging works
+        # FORCE_RENEW: 'true'
+    depends_on:
+        - backend
