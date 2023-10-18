@@ -22,6 +22,12 @@ RUN mkdir build && \
 # main
 FROM node:20-alpine
 
+EXPOSE 3000
+
+ARG STORAGE_CLI_EXEC_PATH=/usr/local/bin/storage-daemon-cli
+ARG STORAGE_WORK_DIR=/
+ARG USE_SHELL=false
+
 WORKDIR /usr/src/app
 
 # install dependencies
@@ -38,8 +44,6 @@ RUN npm run build
 RUN npm prune --production
 
 # add storage daemon cli binaries
-COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon-cli /usr/local/bin/
-
-EXPOSE 3000
+COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon-cli $STORAGE_CLI_EXEC_PATH
 
 CMD ["npm","start:prod"]
