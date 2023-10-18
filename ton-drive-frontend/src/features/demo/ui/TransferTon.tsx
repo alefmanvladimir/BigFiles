@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Address, toNano } from "ton";
-import { useTonConnect } from "../hooks/useTonConnect";
-import { Card, FlexBoxCol, FlexBoxRow, Button, Input } from "./styled/styled";
+import { useTonConnect } from "../../../shared/hooks/useTonConnect";
+import { Card, FlexBoxCol, FlexBoxRow, Button, Input } from "../../../shared/ui/styled";
 
 export function TransferTon() {
   const { sender, connected } = useTonConnect();

@@ -1,6 +1,6 @@
-import { useAsyncInitialize } from "./useAsyncInitialize";
-import { useTonClient } from "./useTonClient";
-import { useTonConnect } from "./useTonConnect";
+import { useAsyncInitialize } from "../../../shared/hooks/useAsyncInitialize";
+import { useTonClient } from "../../../shared/hooks/useTonClient";
+import { useTonConnect } from "../../../shared/hooks/useTonConnect";
 import FaucetJetton from "../contracts/faucetJetton";
 import { Address, OpenedContract } from "ton-core";
 import FaucetJettonWallet from "../contracts/faucetJettonWallet";

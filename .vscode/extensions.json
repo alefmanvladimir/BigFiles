@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "tonwhales.func-vscode",
-        "ton-community.tact-vscode"
+        "ton-community.tact-vscode",
+        "bradlc.vscode-tailwindcss"
     ]
 }
