@@ -1,0 +1,8 @@
+services:
+  daemon:
+    build: ./Dockerfile.storage-daemon
+    ports:
+      - 5555
+      - 3333
+    volumes:
+      - .docker-volumes/ton-storage:/var/lib/ton-storage
