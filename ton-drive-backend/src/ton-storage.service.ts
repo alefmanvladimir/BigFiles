@@ -22,6 +22,7 @@ export class TonStorageService {
     const filePath = filePath1.replace(/\\/g, '/');
     console.log('FILE PATH', filePath);
 
+    // TODO: Support custom Docker network address
     const ls = spawn(`${process.env.STORAGE_CLI_EXEC_PATH}`, ['-I', '127.0.0.1:5555', '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', `\"create -d CreatedFromNest '${filePath}'\"`], {
       cwd: `${process.env.STORAGE_WORK_DIR}`,
       shell: process.env.USE_SHELL === 'true',
@@ -62,6 +63,7 @@ export class TonStorageService {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'create-contract'));
     const file = path.join(tempDir, 'provider-response');
 
+    // TODO: Support custom Docker network address
     const ls = spawn(`${process.env.STORAGE_CLI_EXEC_PATH}`, ['-I', '127.0.0.1:5555', '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', `\"new-contract-message ${bagId} ${file.replace(/\\/g, '/')} --provider ${providerAddress}\"`], {
       cwd: `${process.env.STORAGE_WORK_DIR}`,
       shell: process.env.USE_SHELL === 'true',

@@ -1,0 +1,12 @@
+services:
+  daemon:
+    build: ./Dockerfile.storage-daemon
+    volumes:
+      - .docker-volumes/ton-storage:/var/lib/ton-storage-prod
+
+  backend:
+    build: ./Dockerfile
+    ports:
+      - "80:3000"
+    depends_on:
+      - daemon
