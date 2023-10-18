@@ -20,26 +20,19 @@ RUN mkdir build && \
 
 ####################################
 # main
-FROM node:20-alpine
+FROM ubuntu:20.04
 
-WORKDIR /usr/src/app
+WORKDIR /usr/local/bin/
 
-# install dependencies
-COPY package.json ./
-RUN npm install
+# Copy storage daemon binaries
+COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon-cli ./
+COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon ./
 
-# copy source code
-COPY . .
+# Download global config
+RUN wget https://ton-blockchain.github.io/global.config.json
 
-# build server
-RUN npm run build
+# Open ports for communication
+EXPOSE 3333
+EXPOSE 5555
 
-# remove dev dependencies
-RUN npm prune --production
-
-# add storage daemon cli binaries
-COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon-cli /usr/local/bin/
-
-EXPOSE 3000
-
-CMD ["npm","start:prod"]
+CMD ./storage-daemon -v 3 -C global.config.json -I 0.0.0.0:3333 -p 5555 -D /data/ton-storage
