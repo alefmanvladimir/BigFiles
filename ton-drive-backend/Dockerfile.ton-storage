@@ -1,12 +1,10 @@
-FROM ubuntu:20.04
+FROM alpine:3.14
 
 # Open ports for communication
 EXPOSE 3333
 EXPOSE 5555
 
-RUN apt-get update && \
- apt-get install -y wget unzip && \
- rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache wget unzip
 
 WORKDIR /temp/
 

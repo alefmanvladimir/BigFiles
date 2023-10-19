@@ -1,4 +1,4 @@
-FROM node:20-ubuntu
+FROM node:20-alpine
 
 EXPOSE 3000
 
@@ -6,9 +6,7 @@ ARG STORAGE_CLI_EXEC_PATH=/usr/local/bin/storage-daemon-cli
 ARG STORAGE_WORK_DIR=/
 ARG USE_SHELL=false
 
-RUN apt-get update && \
- apt-get install -y wget unzip && \
- rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache wget unzip
 
 # Download TON binaries
 # TODO: automate versioning
