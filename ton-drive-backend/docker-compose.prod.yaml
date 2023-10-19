@@ -1,5 +1,5 @@
 services:
-  daemon:
+  storage:
     build:
       dockerfile: ./Dockerfile.ton-storage
     volumes:
@@ -9,7 +9,7 @@ services:
     build:
       dockerfile: ./Dockerfile
     depends_on:
-      - daemon
+      - storage
 
   https-portal:
     image:  steveltn/https-portal:1

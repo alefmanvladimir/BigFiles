@@ -1,38 +1,32 @@
-# storage daemon builder
-FROM ubuntu:20.04 as storage_daemon_builder
-RUN apt-get update && \
- DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cmake clang-6.0 openssl libssl-dev zlib1g-dev gperf wget git ninja-build && \
- rm -rf /var/lib/apt/lists/*
-
-ARG TON_REPO
-RUN git clone --recursive ${TON_REPO:-https://github.com/ton-blockchain/ton} /ton
-WORKDIR /ton
-ARG TON_BRANCH
-RUN git checkout ${TON_BRANCH:-master}
-
-ENV CC clang-6.0
-ENV CXX clang++-6.0
-ENV CCACHE_DISABLE 1
-RUN mkdir build && \
- cd build && \
- cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. && \
- ninja storage-daemon storage-daemon-cli
-
-####################################
-# main
 FROM ubuntu:20.04
-
-WORKDIR /usr/local/bin/
-
-# Copy storage daemon binaries
-COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon-cli ./
-COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon ./
-
-# Download global config
-RUN wget https://ton-blockchain.github.io/global.config.json
 
 # Open ports for communication
 EXPOSE 3333
 EXPOSE 5555
 
-CMD ./storage-daemon -v 3 -C global.config.json -I 0.0.0.0:3333 -p 5555 -D /var/lib/ton-storage
+RUN apt-get update && \
+ apt-get install -y wget unzip && \
+ rm -rf /var/lib/apt/lists/*
+
+WORKDIR /temp/
+
+# Download TON binaries
+# TODO: automate versioning
+RUN wget https://github.com/ton-blockchain/ton/releases/download/v2023.06/ton-linux-x86_64.zip \
+  && unzip ton-linux-x86_64.zip \
+  && cp storage-daemon-cli /usr/local/bin/ \
+  && cp storage-daemon /usr/local/bin/ \
+  && rm -rf /temp
+
+WORKDIR /var/lib/
+
+# Download global config
+RUN wget https://ton-blockchain.github.io/global.config.json
+
+WORKDIR /usr/local/bin/
+
+# Allow execution
+RUN chmod +x storage-daemon-cli \
+  && chmod +x storage-daemon
+
+CMD storage-daemon -v 3 -C /var/lib/global.config.json -I 0.0.0.0:3333 -p 5555 -D /var/lib/ton-storage

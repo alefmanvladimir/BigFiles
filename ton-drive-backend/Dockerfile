@@ -1,32 +1,23 @@
-# storage daemon builder
-FROM ubuntu:20.04 as storage_daemon_builder
-RUN apt-get update && \
- DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cmake clang-6.0 openssl libssl-dev zlib1g-dev gperf wget git ninja-build && \
- rm -rf /var/lib/apt/lists/*
-
-ARG TON_REPO
-RUN git clone --recursive ${TON_REPO:-https://github.com/ton-blockchain/ton} /ton
-WORKDIR /ton
-ARG TON_BRANCH
-RUN git checkout ${TON_BRANCH:-master}
-
-ENV CC clang-6.0
-ENV CXX clang++-6.0
-ENV CCACHE_DISABLE 1
-RUN mkdir build && \
- cd build && \
- cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. && \
- ninja storage-daemon storage-daemon-cli
-
-####################################
-# main
-FROM node:20-alpine
+FROM node:20-ubuntu
 
 EXPOSE 3000
 
 ARG STORAGE_CLI_EXEC_PATH=/usr/local/bin/storage-daemon-cli
 ARG STORAGE_WORK_DIR=/
 ARG USE_SHELL=false
+
+RUN apt-get update && \
+ apt-get install -y wget unzip && \
+ rm -rf /var/lib/apt/lists/*
+
+# Download TON binaries
+# TODO: automate versioning
+RUN wget https://github.com/ton-blockchain/ton/releases/download/v2023.06/ton-linux-x86_64.zip \
+  && unzip ton-linux-x86_64.zip \
+  && rm ton-linux-x86_64.zip \
+  && cp storage-daemon-cli ${STORAGE_CLI_EXEC_PATH} \
+  && chmod +x ${STORAGE_CLI_EXEC_PATH} \
+  && rm -rf /temp
 
 WORKDIR /usr/src/app
 
@@ -42,8 +33,5 @@ RUN npm run build
 
 # remove dev dependencies
 RUN npm prune --production
-
-# add storage daemon cli binaries
-COPY --from=storage_daemon_builder /ton/build/storage/storage-daemon/storage-daemon-cli $STORAGE_CLI_EXEC_PATH
 
 CMD ["npm","start:prod"]
