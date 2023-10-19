@@ -1,11 +1,13 @@
 services:
   daemon:
-    build: ./Dockerfile.storage-daemon
+    build:
+      dockerfile: ./Dockerfile.ton-storage
     volumes:
       - .docker-volumes/ton-storage:/var/lib/ton-storage-prod
 
   backend:
-    build: ./Dockerfile
+    build:
+      dockerfile: ./Dockerfile
     depends_on:
       - daemon
 
