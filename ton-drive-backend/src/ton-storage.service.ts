@@ -45,11 +45,15 @@ export class TonStorageService {
   }
 
   private execCliCommand(command: string): Promise<string> {
-    const ls = spawn(`${process.env.STORAGE_CLI_EXEC_PATH}`, ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', command], {
-      cwd: `${process.env.STORAGE_WORK_DIR}`,
-      shell: process.env.USE_SHELL === 'true',
-      windowsVerbatimArguments: true,
-    });
+    const ls = spawn(
+      `${process.env.STORAGE_CLI_EXEC_PATH}`,
+      ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', command],
+      {
+        cwd: `${process.env.STORAGE_WORK_DIR}`,
+        shell: process.env.USE_SHELL === 'true',
+        windowsVerbatimArguments: true,
+      }
+    );
 
     return new Promise((resolve, reject) => {
       let consoleOut: string[] = [];
