@@ -59,7 +59,8 @@ export class TonStorageService {
     );
 
     return new Promise((resolve, reject) => {
-      let consoleOut: string[] = [];
+      const consoleOut: string[] = [];
+      const errorsOut: string[] = [];
 
       ls.stdout.on('data', (data) => {
         console.log(`DATA: ${data}`);
@@ -67,12 +68,12 @@ export class TonStorageService {
       });
 
       ls.stderr.on('data', (data) => {
-        reject(data);
+        errorsOut.push(data.toString());
       });
 
       ls.on('close', (code) => {
         if (code != 0) {
-          reject('Failed');
+          reject(errorsOut.join(''));
         }
         resolve(consoleOut.join(''));
       });

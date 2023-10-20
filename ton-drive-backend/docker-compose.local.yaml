@@ -3,7 +3,7 @@ services:
     build:
       dockerfile: ./Dockerfile.ton-storage
     ports:
-      - 5555
-      - 3333
+      - "5555:5555"
+      - "3333:3333"
     volumes:
       - .docker-volumes/ton-storage-local:/var/lib/ton-storage
