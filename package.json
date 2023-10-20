@@ -8,8 +8,5 @@
   ],
   "devDependencies": {
     "turbo": "^1.10.15"
-  },
-  "dependencies": {
-    "@nestjs/config": "^3.1.1"
   }
 }
