@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { spawn } from 'node:child_process';
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
 import * as process from 'process';
@@ -36,12 +36,12 @@ export class TonStorageService {
   }
 
   async createContract(bagId: string, providerAddress: string): Promise<NodeJS.ArrayBufferView> {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'create-contract'));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'create-contract'));
     const file = path.join(tempDir, 'provider-response');
 
-    const cliResponse = await this.execCliCommand(`\"new-contract-message ${bagId} ${file.replace(/\\/g, '/')} --provider ${providerAddress}\"`);
+    await this.execCliCommand(`\"new-contract-message ${bagId} ${file.replace(/\\/g, '/')} --provider ${providerAddress}\"`);
 
-    return fs.readFileSync(file);
+    return fs.readFile(file);
   }
 
   private execCliCommand(command: string): Promise<string> {
