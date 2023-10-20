@@ -6,4 +6,4 @@ services:
       - 5555
       - 3333
     volumes:
-      - .docker-volumes/ton-storage:/var/lib/ton-storage-local
+      - .docker-volumes/ton-storage-local:/var/lib/ton-storage

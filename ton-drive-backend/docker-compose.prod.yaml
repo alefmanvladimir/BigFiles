@@ -3,7 +3,7 @@ services:
     build:
       dockerfile: ./Dockerfile.ton-storage
     volumes:
-      - .docker-volumes/ton-storage:/var/lib/ton-storage-prod
+      - .docker-volumes/ton-storage-prod:/var/lib/ton-storage
 
   backend:
     build:
