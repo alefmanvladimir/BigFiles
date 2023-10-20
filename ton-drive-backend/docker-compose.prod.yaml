@@ -8,6 +8,8 @@ services:
   backend:
     build:
       dockerfile: ./Dockerfile
+    environment:
+      TON_STORAGE_HOST: storage
     depends_on:
       - storage
 

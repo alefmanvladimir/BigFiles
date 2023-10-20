@@ -8,6 +8,8 @@ import * as process from 'process';
 @Injectable()
 export class TonStorageService {
 
+  private readonly TON_STORAGE_HOST = process.env.TON_STORAGE_HOST || '127.0.0.1'
+
   static parseCreateCmdOutput(out: string): string | null {
     if (out.indexOf('Bag created') == -1) {
       return null;
@@ -43,8 +45,7 @@ export class TonStorageService {
   }
 
   private execCliCommand(command: string): Promise<string> {
-    // TODO: Support custom Docker network address
-    const ls = spawn(`${process.env.STORAGE_CLI_EXEC_PATH}`, ['-I', '127.0.0.1:5555', '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', command], {
+    const ls = spawn(`${process.env.STORAGE_CLI_EXEC_PATH}`, ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', command], {
       cwd: `${process.env.STORAGE_WORK_DIR}`,
       shell: process.env.USE_SHELL === 'true',
       windowsVerbatimArguments: true,
