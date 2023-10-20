@@ -45,9 +45,12 @@ export class TonStorageService {
   }
 
   private execCliCommand(command: string): Promise<string> {
+    const cliKeysDir = process.env.TON_STORAGE_KEYS_DIR || path.join(process.env.STORAGE_WORK_DIR, 'cli-keys');
+    const cliClientKeyPath = path.join(cliKeysDir, 'client');
+    const cliServerKeyPath = path.join(cliKeysDir, 'server.pub');
     const ls = spawn(
       `${process.env.STORAGE_CLI_EXEC_PATH}`,
-      ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', command],
+      ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', cliClientKeyPath, '-p', cliServerKeyPath, '-c', command],
       {
         cwd: `${process.env.STORAGE_WORK_DIR}`,
         shell: process.env.USE_SHELL === 'true',
@@ -64,7 +67,7 @@ export class TonStorageService {
       });
 
       ls.stderr.on('data', (data) => {
-        console.error(`ERR: ${data}`);
+        reject(data);
       });
 
       ls.on('close', (code) => {

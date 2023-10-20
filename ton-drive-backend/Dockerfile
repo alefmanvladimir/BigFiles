@@ -2,6 +2,8 @@ FROM node:20-alpine
 
 EXPOSE 3000
 
+ARG TON_STORAGE_KEYS_DIR
+ARG TON_STORAGE_HOST
 ARG STORAGE_CLI_EXEC_PATH=/usr/local/bin/storage-daemon-cli
 ARG STORAGE_WORK_DIR=/
 ARG USE_SHELL=false
@@ -32,4 +34,4 @@ RUN npm run build
 # remove dev dependencies
 RUN npm prune --production
 
-CMD ["npm","start:prod"]
+CMD ["npm", "run", "start:prod"]
