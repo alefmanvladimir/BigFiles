@@ -2,8 +2,20 @@ services:
   storage:
     build:
       dockerfile: ./Dockerfile.ton-storage
-    ports:
-      - "5555:5555"
-      - "3333:3333"
     volumes:
-      - .docker-volumes/ton-storage-local:/var/lib/ton-storage
+      - .docker-volumes/ton-storage:/usr/ton-storage/storage-db/:rw
+      - .docker-volumes/upload:/usr/ton-storage/upload:ro
+
+  service:
+    build:
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - .docker-volumes/ton-storage/cli-keys/:/usr/ton-storage/storage-db/cli-keys/:ro
+      - .docker-volumes/upload:/usr/ton-storage/upload:rw
+    environment:
+      TON_STORAGE_HOST: storage
+    depends_on:
+      - storage

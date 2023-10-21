@@ -3,17 +3,18 @@ services:
     build:
       dockerfile: ./Dockerfile.ton-storage
     volumes:
-      - .docker-volumes/ton-storage-prod:/var/lib/ton-storage
+      - .docker-volumes/ton-storage:/usr/ton-storage/storage-db/:rw
+      - .docker-volumes/upload:/usr/ton-storage/upload/:ro
 
   service:
     build:
       dockerfile: ./Dockerfile
     restart: always
     volumes:
-      - .docker-volumes/ton-storage-prod/cli-keys:/var/lib/ton-storage/cli-keys
+      - .docker-volumes/ton-storage/cli-keys/:/usr/ton-storage/storage-db/cli-keys/:ro
+      - .docker-volumes/upload/:/usr/ton-storage/upload/:rw
     environment:
       TON_STORAGE_HOST: storage
-      TON_STORAGE_KEYS_DIR: /var/lib/ton-storage/cli-keys
     depends_on:
       - storage
 

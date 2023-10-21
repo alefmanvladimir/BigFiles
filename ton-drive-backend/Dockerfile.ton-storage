@@ -10,21 +10,22 @@ WORKDIR /temp/
 
 # Download TON binaries
 # TODO: automate versioning
-RUN wget https://github.com/ton-blockchain/ton/releases/download/v2023.06/ton-linux-x86_64.zip \
-  && unzip ton-linux-x86_64.zip \
-  && cp storage-daemon-cli /usr/local/bin/ \
-  && cp storage-daemon /usr/local/bin/ \
+RUN wget https://github.com/ton-blockchain/ton/releases/download/v2023.06/ton-linux-x86_64.zip
+
+# Extract required files
+RUN unzip ton-linux-x86_64.zip \
+  && mkdir -p /usr/ton-storage/ \
+  && cp storage-daemon-cli /usr/ton-storage/ \
+  && cp storage-daemon /usr/ton-storage/ \
   && rm -rf /temp
 
-WORKDIR /var/lib/
+WORKDIR /usr/ton-storage/
 
 # Download global config
 RUN wget https://ton-blockchain.github.io/global.config.json
-
-WORKDIR /usr/local/bin/
 
 # Allow execution
 RUN chmod +x storage-daemon-cli \
   && chmod +x storage-daemon
 
-CMD storage-daemon -v 3 -C /var/lib/global.config.json -I 0.0.0.0:3333 -p 5555 -D /var/lib/ton-storage
+CMD ./storage-daemon -v 3 -C global.config.json -I 0.0.0.0:3333 -p 5555 -D storage-db
