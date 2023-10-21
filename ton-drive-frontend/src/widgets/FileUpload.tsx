@@ -16,7 +16,7 @@ export default function FileUpload({ className = '' }: FileUploadProps) {
       method: 'POST',
       body: formData
     });
-    console.log(response)
+    console.log(await response.json())
   }
 
   return (

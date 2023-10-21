@@ -25,9 +25,11 @@ export class TonStorageService {
     await fs.writeFile(filePath, file.buffer);
     console.log('FILE PATH', filePath);
 
-    const cliResponse = await this.execCliCommand(`\"create -d CreatedFromNest '${this.getStorageUploadedFilePath(filePath)}'\"`);
-
-    const bagId = TonStorageService.parseCreateCmdOutput(cliResponse);
+    const cliPromise = this.execCliCommand(`\"create -d CreatedFromNest '${this.getStorageUploadedFilePath(filePath)}'\"`);
+    cliPromise.catch((err) => {
+      fs.rm(filePath);
+    });
+    const bagId = TonStorageService.parseCreateCmdOutput(await cliPromise);
 
     if (bagId) {
       return { bagId };
@@ -52,7 +54,7 @@ export class TonStorageService {
   private async getUploadedFilePath(fileName: string): Promise<string> {
     // Recursive true is needed for cases when .upload already exists
     await fs.mkdir('.upload', { recursive: true })
-    const tempDir = await fs.mkdtemp(path.join('.upload', 'session'));
+    const tempDir = await fs.mkdtemp(path.join('.upload', 'session-'));
     return path.join(tempDir, fileName);
   }
 
