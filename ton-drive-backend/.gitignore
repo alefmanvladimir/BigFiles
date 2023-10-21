@@ -38,3 +38,4 @@ lerna-debug.log*
 
 # Docker volumes
 .docker-volumes/
+.upload/

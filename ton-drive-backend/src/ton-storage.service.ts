@@ -25,7 +25,7 @@ export class TonStorageService {
     await fs.writeFile(filePath, file.buffer);
     console.log('FILE PATH', filePath);
 
-    const cliResponse = await this.execCliCommand(`\"create -d CreatedFromNest '${this.pathToPosix(filePath)}'\"`);
+    const cliResponse = await this.execCliCommand(`\"create -d CreatedFromNest '${this.getStorageUploadedFilePath(filePath)}'\"`);
 
     const bagId = TonStorageService.parseCreateCmdOutput(cliResponse);
 
@@ -45,29 +45,25 @@ export class TonStorageService {
     return fs.readFile(file);
   }
 
-  /**
-   *
-   * Storage daemon doesn't run on Windows, so we need to convert path to posix format.
-   *
-   * @param pathToConvert
-   * @returns path with posix separators
-   */
   private pathToPosix(pathToConvert: string): string {
     return pathToConvert.split(path.sep).join(path.posix.sep);
   }
 
   private async getUploadedFilePath(fileName: string): Promise<string> {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'upload'));
+    // Recursive true is needed for cases when .upload already exists
+    await fs.mkdir('.upload', { recursive: true })
+    const tempDir = await fs.mkdtemp(path.join('.upload', 'session'));
     return path.join(tempDir, fileName);
   }
 
+  private getStorageUploadedFilePath(filepath: string): string {
+    return this.pathToPosix(path.resolve(filepath))
+  }
+
   private execCliCommand(command: string): Promise<string> {
-    const cliKeysDir = process.env.TON_STORAGE_KEYS_DIR || path.join(process.env.STORAGE_WORK_DIR, 'cli-keys');
-    const cliClientKeyPath = path.join(cliKeysDir, 'client');
-    const cliServerKeyPath = path.join(cliKeysDir, 'server.pub');
     const ls = spawn(
       `${process.env.STORAGE_CLI_EXEC_PATH}`,
-      ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', cliClientKeyPath, '-p', cliServerKeyPath, '-c', command],
+      ['-I', `${this.TON_STORAGE_HOST}:5555`, '-k', 'storage-db/cli-keys/client', '-p', 'storage-db/cli-keys/server.pub', '-c', command],
       {
         cwd: `${process.env.STORAGE_WORK_DIR}`,
         shell: process.env.USE_SHELL === 'true',
