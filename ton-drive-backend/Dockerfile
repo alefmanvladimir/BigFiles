@@ -2,8 +2,7 @@ FROM node:20-alpine
 
 EXPOSE 3000
 
-ARG TON_STORAGE_HOST
-ARG STORAGE_CLI_EXEC_PATH=storage-daemon-cli
+ARG STORAGE_CLI_EXEC_PATH=./storage-daemon-cli
 ARG STORAGE_WORK_DIR=/usr/ton-storage/
 ARG USE_SHELL=false
 

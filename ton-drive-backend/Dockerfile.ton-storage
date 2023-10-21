@@ -6,6 +6,10 @@ EXPOSE 5555
 
 RUN apk add --no-cache wget unzip
 
+# RUN apt-get update \
+#  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget unzip \
+#  && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /temp/
 
 # Download TON binaries

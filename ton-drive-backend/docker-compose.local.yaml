@@ -17,5 +17,8 @@ services:
       - .docker-volumes/upload/:/usr/src/app/.upload/:rw
     environment:
       TON_STORAGE_HOST: storage
+      STORAGE_CLI_EXEC_PATH: ./storage-daemon-cli
+      STORAGE_WORK_DIR: /usr/ton-storage/
+      USE_SHELL: 'true'
     depends_on:
       - storage
