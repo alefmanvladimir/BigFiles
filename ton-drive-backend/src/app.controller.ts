@@ -23,7 +23,12 @@ export class AppController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log("Upload")
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'upload'));
+    // const writeStream = fs.createWriteStream(`${tempDir}/${file.originalname}`)
+    // file.
+    console.log("TMP FILE", `${tempDir}/${file.originalname}`)
+    console.log("FILE", file)
     fs.writeFileSync(`${tempDir}/${file.originalname}`, file.buffer);
 
     return this.tonStorageService.createBag(`${tempDir}/${file.originalname}`);
