@@ -20,8 +20,10 @@ export class TonStorageService {
     return res ? res.groups['bagId'] : null;
   }
 
-  async createBag(filePath1: string): Promise<{ bagId: string } | string> {
-    const filePath = filePath1.replace(/\\/g, '/');
+  async createBag(file: Express.Multer.File): Promise<{ bagId: string } | string> {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'upload'));
+    await fs.writeFile(`${tempDir}/${file.originalname}`, file.buffer);
+    const filePath = `${tempDir}/${file.originalname}`.replace(/\\/g, '/');
     console.log('FILE PATH', filePath);
 
     const cliResponse = await this.execCliCommand(`\"create -d CreatedFromNest '${filePath}'\"`);

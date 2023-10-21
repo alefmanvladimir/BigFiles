@@ -1,9 +1,6 @@
 import { Controller, Get, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as fs from 'fs/promises';
-import * as os from 'os';
-import * as path from 'path';
 import { TonStorageService } from './ton-storage.service';
 import { Response } from 'express';
 
@@ -22,11 +19,8 @@ export class AppController {
   //Creates bag from file
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'upload'));
-    await fs.writeFile(`${tempDir}/${file.originalname}`, file.buffer);
-
-    return this.tonStorageService.createBag(`${tempDir}/${file.originalname}`);
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.tonStorageService.createBag(file);
   }
 
   @Post('contracts')
