@@ -21,12 +21,11 @@ export class TonStorageService {
   }
 
   async createBag(file: Express.Multer.File): Promise<{ bagId: string } | string> {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'upload'));
-    await fs.writeFile(`${tempDir}/${file.originalname}`, file.buffer);
-    const filePath = `${tempDir}/${file.originalname}`.replace(/\\/g, '/');
+    const filePath = await this.getUploadedFilePath(file.originalname);
+    await fs.writeFile(filePath, file.buffer);
     console.log('FILE PATH', filePath);
 
-    const cliResponse = await this.execCliCommand(`\"create -d CreatedFromNest '${filePath}'\"`);
+    const cliResponse = await this.execCliCommand(`\"create -d CreatedFromNest '${this.pathToPosix(filePath)}'\"`);
 
     const bagId = TonStorageService.parseCreateCmdOutput(cliResponse);
 
@@ -41,9 +40,25 @@ export class TonStorageService {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'create-contract'));
     const file = path.join(tempDir, 'provider-response');
 
-    await this.execCliCommand(`\"new-contract-message ${bagId} ${file.replace(/\\/g, '/')} --provider ${providerAddress}\"`);
+    await this.execCliCommand(`\"new-contract-message ${bagId} ${this.pathToPosix(file)} --provider ${providerAddress}\"`);
 
     return fs.readFile(file);
+  }
+
+  /**
+   *
+   * Storage daemon doesn't run on Windows, so we need to convert path to posix format.
+   *
+   * @param pathToConvert
+   * @returns path with posix separators
+   */
+  private pathToPosix(pathToConvert: string): string {
+    return pathToConvert.split(path.sep).join(path.posix.sep);
+  }
+
+  private async getUploadedFilePath(fileName: string): Promise<string> {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'upload'));
+    return path.join(tempDir, fileName);
   }
 
   private execCliCommand(command: string): Promise<string> {
