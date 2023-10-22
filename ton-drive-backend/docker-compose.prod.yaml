@@ -4,7 +4,7 @@ services:
       dockerfile: ./Dockerfile.ton-storage
     volumes:
       - .docker-volumes/ton-storage:/usr/ton-storage/storage-db/:rw
-      - .docker-volumes/upload:/usr/ton-storage/upload/:ro
+      - .docker-volumes/upload:/usr/src/app/.upload/:ro
 
   service:
     build:
@@ -12,7 +12,7 @@ services:
     restart: always
     volumes:
       - .docker-volumes/ton-storage/cli-keys/:/usr/ton-storage/storage-db/cli-keys/:ro
-      - .docker-volumes/upload/:/usr/ton-storage/upload/:rw
+      - .docker-volumes/upload/:/usr/src/app/.upload/:rw
     environment:
       TON_STORAGE_HOST: storage
       STORAGE_CLI_EXEC_PATH: ./storage-daemon-cli
