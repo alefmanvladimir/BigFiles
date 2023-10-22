@@ -21,16 +21,11 @@ services:
     depends_on:
       - storage
 
-  https-portal:
-    image:  steveltn/https-portal:1
+  nginx:
+    build:
+      dockerfile: ./Dockerfile.nginx
     ports:
         - "80:80"
         - "443:443"
-    restart: always
-    environment:
-        # TODO: Replace localhost with your domain name or server IP
-        DOMAINS:  "localhost -> http://service:3000"
-        # STAGE: 'production' # Don't use production until staging works
-        # FORCE_RENEW: 'true'
     depends_on:
         - service
