@@ -12,7 +12,7 @@ export default function FileUpload({ className = '' }: FileUploadProps) {
     const file = formData.get('file')
     console.log(file)
 
-    const response = await fetch('http://127.0.0.1:3000/upload', {
+    const response = await fetch('https://'+import.meta.env.VITE_APP_API+'/upload', {
       method: 'POST',
       body: formData
     });

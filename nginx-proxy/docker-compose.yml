@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: jwilder/nginx-proxy:0.9
+    restart: always
+    tty: true
+    ports:
+      - 443:443
+      - 80:80
+    logging:
+      options:
+        max-size: "100m"
+        max-file: "100"
+    volumes:
+      - certs:/etc/nginx/certs
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  nginx-proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    env_file:
+      - ./.env_letsencrypt
+    logging:
+      options:
+        max-size: "100m"
+        max-file: "100"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+      - acme:/etc/acme.sh
+    depends_on:
+      - nginx-proxy
+
+volumes:
+  certs:
+  html:
+  vhost:
+  acme:
+
+networks:
+  default:
+    name: shared-web

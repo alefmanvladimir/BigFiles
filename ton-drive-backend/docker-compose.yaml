@@ -2,9 +2,14 @@ services:
   storage:
     build:
       dockerfile: ./Dockerfile.ton-storage
+    ports:
+      - "3333:3333"
+      - "5555:5555"
     volumes:
       - .docker-volumes/ton-storage:/usr/ton-storage/storage-db/:rw
       - .docker-volumes/upload:/usr/src/app/.upload/:ro
+    networks:
+      - web
 
   service:
     build:
@@ -20,12 +25,27 @@ services:
       USE_SHELL: 'true'
     depends_on:
       - storage
+    networks:
+      - web
 
   nginx:
     build:
       dockerfile: ./Dockerfile.nginx
+    restart: always
     ports:
-        - "80:80"
-        - "443:443"
+      - "8051:80"
+    logging:
+      options:
+        max-size: "100m"
+        max-file: "100"
+    env_file:
+      - ./.env_backend
     depends_on:
-        - service
+      - service
+    networks:
+      - web
+
+networks:
+  web:
+    external: true #needs to be created by other file
+    name: shared-web
