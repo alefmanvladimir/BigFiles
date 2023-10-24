@@ -1,7 +1,7 @@
 import { Blockchain, SandboxContract } from '@ton-community/sandbox';
-import { toNano } from 'ton-core';
 import { TonDriveMaster } from '../wrappers/TonDriveMaster';
 import '@ton-community/test-utils';
+import {toNano} from "ton-core";
 
 describe('TonDriveMaster', () => {
     let blockchain: Blockchain;
@@ -11,30 +11,24 @@ describe('TonDriveMaster', () => {
         blockchain = await Blockchain.create();
 
         tonDriveMaster = blockchain.openContract(await TonDriveMaster.fromInit());
-
-        const deployer = await blockchain.treasury('deployer');
-
-        const deployResult = await tonDriveMaster.send(
-            deployer.getSender(),
-            {
-                value: toNano('0.05'),
-            },
-            {
-                $$type: 'Deploy',
-                queryId: 0n,
-            }
-        );
-
-        expect(deployResult.transactions).toHaveTransaction({
-            from: deployer.address,
-            to: tonDriveMaster.address,
-            deploy: true,
-            success: true,
-        });
     });
 
     it('should deploy', async () => {
-        // the check is done inside beforeEach
-        // blockchain and tonDriveMaster are ready to use
+        const deployer = await blockchain.treasury('deployer');
+        await tonDriveMaster.send(
+            deployer.getSender(),
+            {
+                value: toNano("0.1")
+            },
+            {
+                $$type: 'Deploy',
+                queryId: 0n
+            }
+        )
+        const balance = (await blockchain.getContract(tonDriveMaster.address)).balance
+
+        const collectionAddress = await tonDriveMaster.getUserCollectionAddress(deployer.getSender().address)
+        expect(collectionAddress).not.toBeNull()
+        expect(balance).toBe(0n)
     });
 });

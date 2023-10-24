@@ -18,5 +18,5 @@ export async function run(provider: NetworkProvider) {
 
     await provider.waitForDeploy(tonDriveMaster.address);
 
-    // run methods on `tonDriveMaster`
+    console.log("Address: ", tonDriveMaster.address)
 }
