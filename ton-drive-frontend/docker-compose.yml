@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  web-app:
+    container_name: web-app
+    build: web-app
+    restart: always
+    tty: true
+    ports:
+      - 8052:80
+    logging:
+      options:
+        max-size: "100m"
+        max-file: "100"
+    env_file:
+      - ./.env
+    networks:
+      - web
+
+networks:
+  web:
+    external: true #needs to be created by other file
+    name: shared-web

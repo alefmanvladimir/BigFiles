@@ -1,0 +1,31 @@
+FROM alpine:3.14
+
+# Open ports for communication
+EXPOSE 3333
+EXPOSE 5555
+
+RUN apk add --no-cache wget unzip
+
+WORKDIR /temp/
+
+# Download TON binaries
+# TODO: automate versioning
+RUN wget https://github.com/ton-blockchain/ton/releases/download/v2023.06/ton-linux-x86_64.zip
+
+# Extract required files
+RUN unzip ton-linux-x86_64.zip \
+  && mkdir -p /usr/ton-storage/ \
+  && cp storage-daemon-cli /usr/ton-storage/ \
+  && cp storage-daemon /usr/ton-storage/ \
+  && rm -rf /temp
+
+WORKDIR /usr/ton-storage/
+
+# Download global config
+RUN wget https://ton-blockchain.github.io/global.config.json
+
+# Allow execution
+RUN chmod +x storage-daemon-cli \
+  && chmod +x storage-daemon
+
+CMD ./storage-daemon -v 3 -C global.config.json -I 0.0.0.0:3333 -p 5555 -D storage-db
