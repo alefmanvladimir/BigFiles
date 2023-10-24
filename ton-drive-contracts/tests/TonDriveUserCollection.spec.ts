@@ -1,5 +1,5 @@
 import {
-    Blockchain,
+    Blockchain, prettyLogTransactions, printTransactionFees,
     SandboxContract,
     TreasuryContract
 } from '@ton-community/sandbox';
@@ -37,6 +37,12 @@ describe('TonDriveUserCollection', () => {
     });
 
     it('should create item', async () => {
+        // blockchain.verbosity = {
+        //     debugLogs: true,
+        //     vmLogs: 'vm_logs',
+        //     blockchainLogs: true,
+        //     print: true
+        // }
         //Given
         tonDriveUserCollection = blockchain.openContract(
             await TonDriveUserCollection.fromInit(deployer.getSender().address)
@@ -81,8 +87,16 @@ describe('TonDriveUserCollection', () => {
         const allItems: Dictionary<bigint, FileInfo> = await tonDriveUserCollection.getAllItems()
         const item = allItems.get(torrentHash);
 
+        console.log("My address: ", deployer.getSender().address)
+        console.log("Collection contract: ", tonDriveUserCollection.address)
+        console.log("Storage provider contract: ", storageProvider.address)
+        console.log("Storage contract: ", item?.storageContractAddress)
+
+        prettyLogTransactions(res.transactions)
+
         const storageContractAddress = item?.storageContractAddress!!;
         const storageContract = await blockchain.getContract(storageContractAddress)
+
         expect(parseFloat(fromNano(tonsToSend - storageContract.balance)))
             .toBeCloseTo(0, 0)
 
