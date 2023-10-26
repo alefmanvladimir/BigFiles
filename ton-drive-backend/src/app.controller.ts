@@ -7,8 +7,8 @@ import { Response } from 'express';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
-    private readonly tonStorageService: TonStorageService,
+      private readonly appService: AppService,
+      private readonly tonStorageService: TonStorageService,
   ) {}
 
   @Get()
