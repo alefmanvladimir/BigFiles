@@ -14,6 +14,5 @@ jobs:
         key: ${{ secrets.KEY_ED25519 }}
         port: ${{ secrets.PORT }}
         script: |
-          whoami
           cd bigfiles
-          ls -al
+          sh build.sh
