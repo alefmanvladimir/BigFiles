@@ -1,2 +1,2 @@
  #!/bin/bash
-echo 'helloworld' > hellofile.txt
+echo $(ls) > hellofile.txt
