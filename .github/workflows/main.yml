@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using ssh key
-      uses: ${{ secrets.REPOSITORY_OWNER }}/BigFiles@main
+      uses: mitagmio/BigFiles@main
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
