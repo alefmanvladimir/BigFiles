@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using ssh key
-      uses: mitagmio/TON-Drive@master
+      uses: mitagmio/TON-Drive@main
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
