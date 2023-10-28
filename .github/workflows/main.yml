@@ -14,5 +14,5 @@ jobs:
         key: ${{ secrets.KEY_ED25519 }}
         port: ${{ secrets.PORT }}
         script: |
-          cd bigfiles
+          cd BigFiles
           sh build.sh
