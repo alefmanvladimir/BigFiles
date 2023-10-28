@@ -1,7 +1,5 @@
 import {
     Blockchain,
-    prettyLogTransactions,
-    printTransactionFees,
     SandboxContract,
     TreasuryContract
 } from '@ton-community/sandbox';
@@ -54,10 +52,6 @@ describe('TonDriveMaster', () => {
         )
         const collectionContract = blockchain.openContract(await blockchain.getContract(collectionAddress))
         expect(collectionContract.accountState?.type).toBe("active")
-        console.log("Collection: ", fromNano(collectionContract.balance))
-        console.log("Master: ", fromNano((await blockchain.getContract(tonDriveMaster.address)).balance))
         const userBalance = await user.getBalance()
-        console.log("User: ", fromNano(userBalance))
-        printTransactionFees(res.transactions)
     });
 });
