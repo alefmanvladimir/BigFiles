@@ -2,6 +2,8 @@
     "recommendations": [
         "tonwhales.func-vscode",
         "ton-community.tact-vscode",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker"        
     ]
 }
