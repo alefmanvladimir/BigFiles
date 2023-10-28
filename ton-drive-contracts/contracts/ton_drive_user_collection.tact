@@ -6,15 +6,15 @@ const contract_deployed: Int = 0xbf7bd0c1;
 const close_contract: Int = 0x79f937ea;
 const storage_contract_terminated: Int = 0xb6236d63;
 
-const contract_not_found: Int = 1;
+const contract_not_found: Int = 1101;
 
 struct FileInfo {
     storageContractAddress: Address?;
-    closeRequestSend: Bool;
     closed: Bool;
     //File metadata
     fileSize: Int;
     name: String;
+    created: Int;
 }
 
 contract TonDriveUserCollection with Deployable, Ownable {
@@ -36,23 +36,30 @@ contract TonDriveUserCollection with Deployable, Ownable {
       let storageFee: Int = self.minForStorage - min(tonBalanceBeforeMsg, self.minForStorage);
       msgValue = msgValue - (storageFee + self.gasConsumption);
 
-      send(SendParameters{
+      if(createMsg.storageProviderAddress != null) {
+        send(SendParameters{
           value: msgValue,
-          to: createMsg.storageProviderAddress,
+          to: createMsg.storageProviderAddress!!,
           mode: SendIgnoreErrors,
           body: createMsg.payload
-      });
+        });
+      }
+
       let payloadSlice: Slice = createMsg.payload.beginParse();
       //op + query_id
       payloadSlice.loadBits(32 + 64);
-      let torrentHash: Int = payloadSlice.loadRef().hash();
+      let torrentInfo: Cell = payloadSlice.loadRef();
+      let torrentHash: Int = torrentInfo.hash();
+      let torrentInfoSlice: Slice = torrentInfo.beginParse();
+      torrentInfoSlice.loadBits(32);
+      let fileSize: Int = torrentInfoSlice.loadUint(64);
 
       self.hash_to_info_map.set(torrentHash, FileInfo{
         storageContractAddress: null,
-        closeRequestSend: false,
-        fileSize: createMsg.fileSize,
+        fileSize: fileSize,
         name: createMsg.name,
-        closed: false
+        closed: false,
+        created: now()
       });
     }
 
@@ -62,19 +69,19 @@ contract TonDriveUserCollection with Deployable, Ownable {
         if (storedItem == null) {
             throw(contract_not_found);
         } else {
-            if(!(storedItem!!).closeRequestSend) {
-                send(SendParameters{
-                    to: (storedItem!!).storageContractAddress!!,
-                    body: beginCell()
-                        .storeUint(close_contract, 32)
-                        //query id
-                        .storeUint(0, 64).endCell(),
-                    value: 0,
-                    mode: SendIgnoreErrors + SendRemainingValue
-                });
-            }
+            send(SendParameters{
+                to: (storedItem!!).storageContractAddress!!,
+                body: beginCell()
+                    .storeUint(close_contract, 32)
+                    //query id
+                    .storeUint(0, 64).endCell(),
+                value: 0,
+                mode: SendRemainingValue
+            });
         }
     }
+
+    receive("create_collection"){}
 
     receive("withdraw_all"){
         self.requireOwner();
@@ -98,10 +105,10 @@ contract TonDriveUserCollection with Deployable, Ownable {
             if (storedItem != null) {
                 self.hash_to_info_map.set(torrentHashFromMsg, FileInfo{
                     storageContractAddress: sender(),
-                    closeRequestSend: false,
                     fileSize: (storedItem!!).fileSize,
                     name: (storedItem!!).name,
-                    closed: false
+                    closed: false,
+                    created: (storedItem!!).created
                 });
             }
         } else if(op == storage_contract_terminated){
@@ -110,11 +117,11 @@ contract TonDriveUserCollection with Deployable, Ownable {
             let storedItem: FileInfo? = self.hash_to_info_map.get(torrentHashFromMsg);
             if (storedItem != null) {
                 self.hash_to_info_map.set(torrentHashFromMsg, FileInfo{
-                    storageContractAddress: null,
-                    closeRequestSend: true,
+                    storageContractAddress: (storedItem!!).storageContractAddress,
                     fileSize: (storedItem!!).fileSize,
                     name: (storedItem!!).name,
-                    closed: true
+                    closed: true,
+                    created: (storedItem!!).created
                 });
             }
         }

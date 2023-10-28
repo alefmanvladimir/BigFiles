@@ -7,6 +7,18 @@ contract TonDriveMaster with Deployable {
 
     }
 
+    receive("create_collection") {
+        let userCollectionInit: StateInit = self.getUserCollection(sender());
+        send(SendParameters{
+            to: contractAddress(userCollectionInit),
+            value: 0,
+            mode: SendIgnoreErrors + SendRemainingValue,
+            code: userCollectionInit.code,
+            data: userCollectionInit.data,
+            body: "create_collection".asComment()
+        });
+    }
+
     get fun user_collection_address(userAddr: Address): Address {
       return contractAddress(self.getUserCollection(userAddr));
     }
