@@ -12,6 +12,9 @@ import {
 } from "ton-core";
 import {TonClient} from "ton";
 
+// TODO replace code copies with imports from contracts workspace
+import {} from "ton-drive-contracts/wrappers/TonDriveUserCollection"
+
 export type FileInfo = {
     storageContractAddress: Address | null,
     fileSize: bigint,

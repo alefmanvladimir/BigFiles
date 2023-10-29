@@ -5,7 +5,7 @@ import App from "./App";
 import "./index.css";
 // this manifest is used temporarily for development purposes
 const manifestUrl =
-  "https://bigfiles.cloud/public/tonconnect-manifest.json";
+  "https://bigfiles.cloud/tonconnect-manifest.json";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },

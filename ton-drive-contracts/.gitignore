@@ -1,3 +1,11 @@
 node_modules
 temp
-build
+# TODO build wrappers in CI and ignore all build artifacts
+build/**/*.abi
+build/**/*.boc
+build/**/*.fif
+build/**/*.fc
+build/**/*.md
+build/**/*.pkg
+build/**/*.json
+
