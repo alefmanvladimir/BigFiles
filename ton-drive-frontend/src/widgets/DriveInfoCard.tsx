@@ -6,7 +6,7 @@ export interface AccountInfoProps {
   className?: string
 }
 
-export default function DriveInfo({className = ""}: AccountInfoProps) {
+export default function DriveInfoCard({className = ""}: AccountInfoProps) {
   const myDriveContract = useMyCollectionContract()
   const driveInfo = useRealtimeCollectionInfo()
   const isLoading = !driveInfo
