@@ -15,6 +15,7 @@ export function useMyCollection() {
         const client = tonClient.client
 
         if (wallet == null || wallet == '' || !client) {
+            setCollection(null);
             return;
         }
         const userAddr = Address.parse(wallet)
