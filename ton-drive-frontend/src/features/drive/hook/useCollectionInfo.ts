@@ -1,7 +1,7 @@
-import {CollectionInfo} from "../../services/FilesService";
+import {CollectionInfo} from "../../../services/FilesService";
 import {useEffect, useState} from "react";
 import {useMyCollection} from "./useMyCollection";
-import { useRealtimeRemoteState } from "../../shared/hooks/useRealtimeRemoteState";
+import { useRealtimeRemoteState } from "../../../shared/hooks/useRealtimeRemoteState";
 
 export function useCollectionInfo(): CollectionInfo | null {
     const [info, setInfo] = useState<CollectionInfo | null>(null)

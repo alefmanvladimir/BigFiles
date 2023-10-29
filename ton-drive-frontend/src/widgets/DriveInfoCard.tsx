@@ -1,6 +1,6 @@
-import {useRealtimeCollectionInfo} from "./hooks/useCollectionInfo";
+import {useRealtimeCollectionInfo} from "../features/drive/hook/useCollectionInfo";
 import {fromNano} from "ton";
-import {useMyCollection as useMyCollectionContract} from "./hooks/useMyCollection";
+import {useMyCollection as useMyCollectionContract} from "../features/drive/hook/useMyCollection";
 
 export interface AccountInfoProps {
   className?: string

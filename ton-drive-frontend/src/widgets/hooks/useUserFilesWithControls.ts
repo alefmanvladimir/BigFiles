@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {useUserFiles} from "./useUserFiles";
+import {useUserFiles} from "../../features/file/hooks/useUserFiles";
 
 import type { TonStorageFile } from "../../entities/file/model/TonStorageFile";
 

@@ -1,5 +1,5 @@
 import FilesList, {type FilesListProps} from "../../../entities/file/ui/FilesList";
-import {useMyCollection} from "../../../widgets/hooks/useMyCollection";
+import {useMyCollection} from "../../drive/hook/useMyCollection";
 import {TonStorageFile} from "../../../entities/file/model/TonStorageFile";
 
 export interface FilesListWithActionsProps {

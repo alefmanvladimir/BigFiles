@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import type {TonStorageFile} from "../../entities/file/model/TonStorageFile";
-import {useMyCollection} from "./useMyCollection";
+import type {TonStorageFile} from "../../../entities/file/model/TonStorageFile";
+import {useMyCollection} from "../../drive/hook/useMyCollection";
 
 export function useUserFiles(): TonStorageFile[] {
     const [files, setFiles] = useState<TonStorageFile[]>([]);
