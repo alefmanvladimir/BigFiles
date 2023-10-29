@@ -1,12 +1,12 @@
 import FilesNavigationCard from "../widgets/FilesNavigationCard"
-import FileUpload from "../widgets/FileUpload"
+import FileUploadCard from "../widgets/FileUploadCard"
 import DriveInfoCard from "../widgets/DriveInfoCard";
 
 export default function FilesListPage() {
   return (
     <>
       <DriveInfoCard className="my-2" />
-      <FileUpload/>
+      <FileUploadCard className="my-2" />
       <FilesNavigationCard className="my-2"/>
     </>
   )
