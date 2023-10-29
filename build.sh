@@ -1,5 +1,4 @@
  #!/bin/bash
-git pull --all
 cd ton-drive-backend
 docker-compose up --force-recreate --build -d
 cd .. && cd ton-drive-frontend

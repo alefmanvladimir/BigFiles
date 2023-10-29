@@ -15,4 +15,5 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd BigFiles
+          git pull --all
           sh build.sh
