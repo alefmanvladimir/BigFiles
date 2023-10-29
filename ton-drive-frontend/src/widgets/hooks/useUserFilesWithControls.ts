@@ -1,10 +1,10 @@
 import {useState, useEffect} from "react";
-import {useUserFiles} from "../../features/file/hooks/useUserFiles";
+import {useRealtimeUserFiles} from "../../features/file/hooks/useUserFiles";
 
 import type { TonStorageFile } from "../../entities/file/model/TonStorageFile";
 
 export function useUserFilesWithControls() {
-  const files = useUserFiles()
+  const files = useRealtimeUserFiles()
   const [filteredFiles, setFilteredFiles] = useState(files)
   const [displayedFiles, setDisplayedFiles] = useState(files)
 
