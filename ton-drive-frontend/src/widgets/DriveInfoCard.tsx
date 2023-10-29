@@ -1,3 +1,4 @@
+import ContractLink from "../shared/ui/ContractLink";
 import {useRealtimeCollectionInfo} from "../features/drive/hook/useCollectionInfo";
 import {fromNano} from "ton";
 import {useMyCollection as useMyCollectionContract} from "../features/drive/hook/useMyCollection";
@@ -30,7 +31,7 @@ export default function DriveInfoCard({className = ""}: AccountInfoProps) {
               <tbody>
                 <tr>
                   <th>Address</th>
-                  <td>{driveInfo?.address?.toString()}</td>
+                  <td><ContractLink address={driveInfo?.address?.toString()} /></td>
                 </tr>
                 <tr>
                   <th>Balance</th>
@@ -46,13 +47,13 @@ export default function DriveInfoCard({className = ""}: AccountInfoProps) {
         <div className="card-actions justify-end">
           <button
             disabled={isLoading}
-            className={"btn btn-outline btn-sm btn-primary " + (isLoading ? 'btn-disabled' : '')}
+            className={"btn btn-outline btn-sm btn-error " + (isLoading ? 'btn-disabled' : '')}
             onClick={() => withdrawDriveBalance()}>
             {!isLoading ? <> Withdraw </> : <span className="loading loading-bars loading-sm" />}
           </button>
           <button
             disabled={isLoading}
-              className={"btn btn-outline btn-sm btn-secondary " + (isLoading ? 'btn-disabled' : '')}
+              className={"btn btn-outline btn-sm btn-accent " + (isLoading ? 'btn-disabled' : '')}
               onClick={() => topUpDriveBalance()}>
             {!isLoading ? <> Top Up </> : <span className="loading loading-bars loading-sm" />}
           </button>

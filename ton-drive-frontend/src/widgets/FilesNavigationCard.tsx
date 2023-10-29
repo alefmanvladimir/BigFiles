@@ -15,7 +15,7 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
   } = useUserFilesWithControls()
 
   return (
-    <div className={`card bg-base-200 ${className}`}>
+    <div className={`card card-compact sm:card-normal bg-base-200 ${className}`}>
       <div className="card-body">
         <h2 className="card-title">Files</h2>
         <div className="flex gap-2 flex-wrap flex-col sm:flex-row">

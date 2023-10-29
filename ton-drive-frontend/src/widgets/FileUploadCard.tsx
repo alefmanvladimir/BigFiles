@@ -41,7 +41,7 @@ export default function FileUpload({className = ''}: FileUploadProps) {
   }
 
   return (
-    <div className={`card bg-base-200 ${className}`}>
+    <div className={`card card-compact sm:card-normal bg-base-200 ${className}`}>
       <form
         onSubmit={handleFileUpload}
         encType='multipart/form-data'
@@ -52,7 +52,7 @@ export default function FileUpload({className = ''}: FileUploadProps) {
           className="file-input file-input-bordered file-input-accent w-full max-w-xs"/>
         <div className="card-actions justify-end">
           <button type='submit' disabled={isFetching}
-            className={`btn btn-accent btn-sm ${isFetching ? 'btn-disabled' : ''}`}>
+            className={`btn btn-accent btn-outline btn-sm ${isFetching ? 'btn-disabled' : ''}`}>
             {
               isFetching ? 'Uploading...' : 'Upload'
             }

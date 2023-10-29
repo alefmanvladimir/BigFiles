@@ -45,6 +45,9 @@ export function useRealtimeUserFiles() {
         if (oldFile.bagId !== newFile.bagId) {
           return false;
         }
+        if (oldFile.storageContractInfo.address?.toRawString() !== newFile.storageContractInfo.address?.toRawString()) {
+          return false;
+        }
       }
       return true;
     },
