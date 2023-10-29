@@ -1,13 +1,13 @@
 import {
-    Blockchain, prettyLogTransactions, printTransactionFees,
-    SandboxContract,
-    TreasuryContract
+    Blockchain,
+    SandboxContract, TreasuryContract,
 } from '@ton-community/sandbox';
 import {Address, beginCell, Dictionary, fromNano, toNano} from 'ton-core';
 import {FileInfo, TonDriveUserCollection} from '../wrappers/TonDriveUserCollection';
 import '@ton-community/test-utils';
 import {StorageProvider} from "../wrappers/StorageProvider";
 import {compile} from '@ton-community/blueprint';
+import now = jest.now;
 
 describe('TonDriveUserCollection', () => {
     let blockchain: Blockchain;
@@ -71,7 +71,7 @@ describe('TonDriveUserCollection', () => {
             .storeUint(10, 32)
             .endCell()
 
-        const res = await tonDriveUserCollection.send(
+        await tonDriveUserCollection.send(
             deployer.getSender(),
             {
                 value: tonsToSend
@@ -80,19 +80,11 @@ describe('TonDriveUserCollection', () => {
                 $$type: 'Create',
                 payload: storageOffer,
                 storageProviderAddress: storageProvider.address,
-                fileSize: 1024n,
                 name: 'file.txt'
             }
         )
         const allItems: Dictionary<bigint, FileInfo> = await tonDriveUserCollection.getAllItems()
         const item = allItems.get(torrentHash);
-
-        console.log("My address: ", deployer.getSender().address)
-        console.log("Collection contract: ", tonDriveUserCollection.address)
-        console.log("Storage provider contract: ", storageProvider.address)
-        console.log("Storage contract: ", item?.storageContractAddress)
-
-        prettyLogTransactions(res.transactions)
 
         const storageContractAddress = item?.storageContractAddress!!;
         const storageContract = await blockchain.getContract(storageContractAddress)
@@ -101,7 +93,9 @@ describe('TonDriveUserCollection', () => {
             .toBeCloseTo(0, 0)
 
         expect(item?.name).toBe("file.txt");
-        expect(item?.fileSize).toBe(1024n);
+        expect(item?.fileSize).toBe(123n);
+        expect((parseInt(item!!.created.toString()) - now()/1000)/1000)
+            .toBeCloseTo(0, 0)
     });
 
     it('should close contract', async () => {
@@ -142,7 +136,6 @@ describe('TonDriveUserCollection', () => {
                 $$type: 'Create',
                 payload: storageOffer,
                 storageProviderAddress: storageProvider.address,
-                fileSize: 1025n,
                 name: 'file2.txt'
             }
         )
@@ -163,9 +156,11 @@ describe('TonDriveUserCollection', () => {
         const allItems: Dictionary<bigint, FileInfo> = await tonDriveUserCollection.getAllItems()
         const item = allItems.get(torrentHash);
         const storageContractAddress = item?.storageContractAddress;
+        const isClosed = item?.closed
 
         expect(storageContractAddress)
-            .toBeNull();
+            .not.toBeNull();
+        expect(isClosed).toBeTruthy();
     });
 
     it('should not allow to create item from other user', async () => {
@@ -198,7 +193,7 @@ describe('TonDriveUserCollection', () => {
             .endCell()
 
         const otherUser = await blockchain.treasury("user")
-        const res = await tonDriveUserCollection.send(
+        await tonDriveUserCollection.send(
             otherUser.getSender(),
             {
                 value: tonsToSend
@@ -207,7 +202,6 @@ describe('TonDriveUserCollection', () => {
                 $$type: 'Create',
                 payload: storageOffer,
                 storageProviderAddress: storageProvider.address,
-                fileSize: 1024n,
                 name: 'file.txt'
             }
         )
@@ -255,7 +249,6 @@ describe('TonDriveUserCollection', () => {
                 $$type: 'Create',
                 payload: storageOffer,
                 storageProviderAddress: storageProvider.address,
-                fileSize: 1025n,
                 name: 'file2.txt'
             }
         )
@@ -311,7 +304,7 @@ describe('TonDriveUserCollection', () => {
             .storeUint(10, 32)
             .endCell()
 
-        const res = await tonDriveUserCollection.send(
+        await tonDriveUserCollection.send(
             deployer.getSender(),
             {
                 value: tonsToSend
@@ -320,7 +313,6 @@ describe('TonDriveUserCollection', () => {
                 $$type: 'Create',
                 payload: storageOffer,
                 storageProviderAddress: storageProvider.address,
-                fileSize: 1024n,
                 name: 'file.txt'
             }
         )
@@ -365,7 +357,7 @@ describe('TonDriveUserCollection', () => {
             .storeUint(10, 32)
             .endCell()
 
-        const res = await tonDriveUserCollection.send(
+        await tonDriveUserCollection.send(
             deployer.getSender(),
             {
                 value: tonsToSend
@@ -374,7 +366,6 @@ describe('TonDriveUserCollection', () => {
                 $$type: 'Create',
                 payload: storageOffer,
                 storageProviderAddress: storageProvider.address,
-                fileSize: 1024n,
                 name: 'file.txt'
             }
         )

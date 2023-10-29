@@ -1,3 +1,8 @@
+import {Address} from "ton-core";
+
+export type StorageContractInfo = {
+  address: Address | null
+}
 export interface TonStorageFile {
   name: string;
   extension: string;
@@ -5,4 +10,5 @@ export interface TonStorageFile {
   size: number;
   bagId: string;
   date: Date;
+  storageContractInfo: StorageContractInfo
 }

@@ -1,8 +1,7 @@
 message Create {
   payload: Cell;
-  storageProviderAddress: Address;
+  storageProviderAddress: Address?;
   name: String;
-  fileSize: Int;
 }
 
 message CloseItem {
