@@ -1,23 +1,23 @@
-name: remote ssh command main
+name: remote ssh command stage
 on:
   push:
     branches:
-      - main
+      - stage
 
 jobs:
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/stage'
     steps:
     - name: executing remote ssh commands using ssh key
       uses: appleboy/ssh-action@v1.0.0
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY_ED25519 }}
-        port: ${{ secrets.PORT }}
+        host: ${{ secrets.STAGE_HOST }}
+        username: ${{ secrets.STAGE_USERNAME }}
+        key: ${{ secrets.STAGE_KEY_ED25519 }}
+        port: ${{ secrets.STAGE_PORT }}
         script: |
           cd BigFiles
           git pull --all
