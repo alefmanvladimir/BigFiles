@@ -46,7 +46,7 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
             <FilesSearchBox files={dataToFilter} onSearch={onFilter}/>
             <FilesSortControls files={dataToSort} onSort={onSort}/>
           </div>
-          <FilesTable files={files} onChooseFile={chooseFile}/>
+          <FilesTable className="table-sm sm:table-md" files={files} onChooseFile={chooseFile}/>
         </div>
       </div>
       {

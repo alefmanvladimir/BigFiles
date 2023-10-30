@@ -7,7 +7,7 @@ export default function DriveDashboard() {
   return (
     <>
       <section className="grid items-start xl:grid-cols-[500px_1fr] gap-2 md:gap-3 xl:gap-5">
-        <div className="grid gap-2 md:gap-3 xl:gap-5">
+        <div className="grid items-start gap-2 md:grid-cols-2 md:gap-3 grid-cols-1 xl:gap-5">
           <DriveInfoCard />
           <RequireUserDrive>
             <FileUploadCard />
