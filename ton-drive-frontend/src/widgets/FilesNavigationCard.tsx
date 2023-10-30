@@ -1,7 +1,8 @@
-import ExapndedFilesListWithActions from "../features/file/ui/ExpandedFilesListWithActions";
+import FilesTable from "../entities/file/ui/FilesTable";
 import FilesSortControls from "../features/file/ui/FilesSortControls";
 import FilesSearchBox from "../features/file/ui/FilesSearchBox";
 import { useUserFilesWithControls } from "./hooks/useUserFilesWithControls";
+import { TonStorageFile } from "../entities/file/model/TonStorageFile";
 
 export interface FilesNavigationProps {
   className?: string
@@ -14,6 +15,10 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
     onFilter, onSort
   } = useUserFilesWithControls()
 
+  function chooseFile(file: TonStorageFile) {
+    console.log(file)
+  }
+
   return (
     <div className={`card card-compact sm:card-normal bg-base-200 ${className}`}>
       <div className="card-body">
@@ -22,7 +27,7 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
           <FilesSearchBox files={dataToFilter} onSearch={onFilter}/>
           <FilesSortControls files={dataToSort} onSort={onSort}/>
         </div>
-        <ExapndedFilesListWithActions files={files}/>
+        <FilesTable files={files} onChooseFile={chooseFile}/>
       </div>
     </div>
   )
