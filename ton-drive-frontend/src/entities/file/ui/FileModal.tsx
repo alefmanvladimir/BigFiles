@@ -26,18 +26,26 @@ export default forwardRef(function FileModal(
       {
         file ?
           <div className="modal-box">
-            <h3 className="font-bold text-lg">
-              {file.name}
-              <div className="badge badge-neutral ml-1">{file.extension}</div>
-            </h3>
-            <p>
-              <FileSize size={file.size} /> | <FileDate date={file.date} />
-            </p>
-            <div>
-              <FileTypeIcon extension={file.extension} />
-            </div>
-            <section className="overflow-x-auto">
-              <table className="table">
+            <form onSubmit={handleClose} method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+            <header className="flex flex-wrap items-center gap-2 mb-3">
+              <div>
+                <FileTypeIcon extension={file.extension} />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">
+                  {file.name}
+                  <div className="badge badge-neutral ml-1">{file.extension}</div>
+                </h3>
+                <p>
+                  <FileSize size={file.size} /> | <FileDate date={file.date} />
+                </p>
+              </div>
+            </header>
+            <section className="overflow-x-auto my-3">
+              <table className="table table-pin-cols">
                 <tbody>
                   <tr>
                     <th>Bag ID</th>
@@ -57,10 +65,6 @@ export default forwardRef(function FileModal(
             </section>
             <section className="modal-action">
               {actions}
-              <form onSubmit={handleClose} method="dialog">
-                {/* if there is a button in form, it will close the modal */}
-                <button className="btn">Close</button>
-              </form>
             </section>
           </div> :
           <div className="modal-box">

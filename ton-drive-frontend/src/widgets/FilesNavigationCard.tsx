@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import FilesTable from "../entities/file/ui/FilesTable";
 import FilesSortControls from "../features/file/ui/FilesSortControls";
 import FilesSearchBox from "../features/file/ui/FilesSearchBox";
@@ -17,11 +17,21 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
     onFilter, onSort
   } = useUserFilesWithControls()
 
+  const [selectedFileBagId, setSelectedFileBagId] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<TonStorageFile | null>(null)
   const modalRef = useRef<HTMLDialogElement>(null)
 
+  useEffect(() => {
+    if (selectedFileBagId) {
+      const file = files.find(file => file.bagId === selectedFileBagId)
+      if (file) {
+        setSelectedFile(file)
+      }
+    }
+  }, [selectedFileBagId, files])
+
   function chooseFile(file: TonStorageFile) {
-    setSelectedFile(file)
+    setSelectedFileBagId(file.bagId)
     if (modalRef.current) {
       modalRef.current.showModal()
     }
