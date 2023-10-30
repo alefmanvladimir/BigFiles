@@ -1,4 +1,4 @@
-import FilesListWithActions from "../features/file/ui/FilesListWithActions";
+import ExapndedFilesListWithActions from "../features/file/ui/ExpandedFilesListWithActions";
 import FilesSortControls from "../features/file/ui/FilesSortControls";
 import FilesSearchBox from "../features/file/ui/FilesSearchBox";
 import { useUserFilesWithControls } from "./hooks/useUserFilesWithControls";
@@ -22,7 +22,7 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
           <FilesSearchBox files={dataToFilter} onSearch={onFilter}/>
           <FilesSortControls files={dataToSort} onSort={onSort}/>
         </div>
-        <FilesListWithActions files={files}/>
+        <ExapndedFilesListWithActions files={files}/>
       </div>
     </div>
   )

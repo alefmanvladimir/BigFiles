@@ -1,4 +1,4 @@
-import FilesList, {type FilesListProps} from "../../../entities/file/ui/FilesList";
+import ExpandedFilesList, {type FilesListProps} from "../../../entities/file/ui/ExpandedFilesList";
 import {useMyCollection} from "../../drive/hook/useMyCollection";
 import {TonStorageFile} from "../../../entities/file/model/TonStorageFile";
 
@@ -30,7 +30,7 @@ const createActions = (close: (hexBagId: string) => Promise<void>) => (file: Ton
     )
 }
 
-export default function FilesListWithActions(
+export default function ExpandedFilesListWithActions(
     {className, files}: FilesListWithActionsProps) {
     const myCollection = useMyCollection()
     const closeItem = (bagId: string) => {
@@ -38,7 +38,7 @@ export default function FilesListWithActions(
     }
     return (
         <>
-            <FilesList className={className} files={files} createActions={createActions(closeItem)}/>
+            <ExpandedFilesList className={className} files={files} createActions={createActions(closeItem)}/>
         </>
     )
 }
