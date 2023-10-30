@@ -1,6 +1,7 @@
 import ExpandedFilesList, {type FilesListProps} from "../../../entities/file/ui/ExpandedFilesList";
 import {useMyCollection} from "../../drive/hook/useMyCollection";
 import {TonStorageFile} from "../../../entities/file/model/TonStorageFile";
+import { createDownloadLink } from "../../../entities/file/utils/createDownloadLink";
 
 export interface FilesListWithActionsProps {
     className?: string
@@ -41,9 +42,4 @@ export default function ExpandedFilesListWithActions(
             <ExpandedFilesList className={className} files={files} createActions={createActions(closeItem)}/>
         </>
     )
-}
-
-function createDownloadLink(file: TonStorageFile) {
-  // TODO: replace link with personal
-  return `https://storage.ton.run/gateway/${file.bagId}/${file.name}.${file.extension}`
 }
