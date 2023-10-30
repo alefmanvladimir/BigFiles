@@ -10,7 +10,7 @@ export interface FilesListItemProps {
   actions?: JSX.Element;
 }
 
-export default function FilesListItem({ file, className, actions }: FilesListItemProps) {
+export default function ExpandedFilesListItem({ file, className, actions }: FilesListItemProps) {
   return (
     <li className={`card card-compact bg-base-300 p-3 ${className ?? ""}`}>
       <div className="font-bold text-md">
