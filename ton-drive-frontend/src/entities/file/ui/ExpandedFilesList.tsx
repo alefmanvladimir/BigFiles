@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import FilesListItem from "./FilesListItem";
+import ExpandedFilesListItem from "./ExpandedFilesListItem";
 import type { TonStorageFile } from "../model/TonStorageFile"
 
 export interface FilesListProps {
@@ -9,12 +9,12 @@ export interface FilesListProps {
   createActions?: (file: TonStorageFile) => JSX.Element
 }
 
-export default function FilesList({ files, className, createActions }: FilesListProps) {
+export default function ExpandedFilesList({ files, className, createActions }: FilesListProps) {
   const memoizedCreateActions = useCallback(createActions ?? defaultCreateActions, [createActions, files])
   return (
     <ul className={`${className ?? ''}`}>
       {files.map((file, index) => (
-        <FilesListItem key={index} className="my-3" file={file} actions={memoizedCreateActions(file)} />
+        <ExpandedFilesListItem key={index} className="my-3" file={file} actions={memoizedCreateActions(file)} />
       ))}
     </ul>
   )

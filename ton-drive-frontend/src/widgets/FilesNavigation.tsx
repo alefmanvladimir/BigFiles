@@ -1,9 +1,6 @@
-import {useState, useEffect} from "react";
-
-import FilesListWithActions from "../features/file/ui/FilesListWithActions";
+import ExpandedFilesListWithActions from "../features/file/ui/ExpandedFilesListWithActions";
 import FilesSortControls from "../features/file/ui/FilesSortControls";
 import FilesSearchBox from "../features/file/ui/FilesSearchBox";
-import {useUserFiles} from "../features/file/hooks/useUserFiles";
 import { useUserFilesWithControls } from "./hooks/useUserFilesWithControls";
 
 export default function FilesNavigation() {
@@ -18,7 +15,7 @@ export default function FilesNavigation() {
                 <FilesSearchBox files={dataToFilter} onSearch={onFilter}/>
                 <FilesSortControls files={dataToSort} onSort={onSort}/>
             </div>
-            <FilesListWithActions files={files}/>
+            <ExpandedFilesListWithActions files={files}/>
         </>
     )
 }
