@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {type FormEvent} from "react"
 import {useTonClient} from "../shared/hooks/useTonClient";
 import {useTonConnect} from "../shared/hooks/useTonConnect";
@@ -20,8 +20,21 @@ export default function FileUpload({className = ''}: FileUploadProps) {
   const [fileString, setFileString] = useState<string | null>(null)
   const [fileName, fileExtension] = useMemo(() => splitFileName(fileString ?? ''), [fileString])
   const [isDragOver, setIsDragOver] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  function handleFileChange(e: FormEvent<HTMLInputElement>) {
+  function handleReset(e: FormEvent<HTMLFormElement>) {
+    if (fileInputRef.current == null) {
+      return
+    }
+    fileInputRef.current.value = ''
+    handleFileChange()
+  }
+
+  function handleFileChange(e?: FormEvent<HTMLInputElement>) {
+    if (!e) {
+      setFileString(null)
+      return
+    }
     const file = e.currentTarget.files?.item(0)
     if (file == null) {
       setFileString(null)
@@ -59,6 +72,7 @@ export default function FileUpload({className = ''}: FileUploadProps) {
     <div className={`card card-compact sm:card-normal bg-base-200 ${className}`}>
       <form
         onSubmit={handleFileUpload}
+        onReset={handleReset}
         encType='multipart/form-data'
         className="card-body gap-y-2"
         aria-disabled={isFetching}>
@@ -80,11 +94,15 @@ export default function FileUpload({className = ''}: FileUploadProps) {
               <h3 className={`text-xl font-bold`}>Choose a file...</h3>
             }
           </div>
-          <input id="file-input" type='file' name='file' required disabled={isFetching}
+          <input ref={fileInputRef} id="file-input" type='file' name='file' required disabled={isFetching}
             onChange={handleFileChange}
             className="opacity-0 absolute inset-0 block cursor-pointer"/>
         </label>
         <div className="card-actions justify-end">
+          <button type='reset' disabled={isFetching || !fileString}
+            className={`btn btn-error btn-outline btn-sm ${isFetching || !fileString ? 'btn-disabled' : ''}`}>
+            Cancel
+          </button>
           <button type='submit' disabled={isFetching || !fileString}
             className={`btn btn-accent btn-outline btn-sm ${isFetching || !fileString ? 'btn-disabled' : ''}`}>
             {
