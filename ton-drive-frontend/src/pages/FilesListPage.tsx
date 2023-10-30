@@ -1,14 +1,16 @@
-import FilesNavigation from "../widgets/FilesNavigation"
-import FileUpload from "../widgets/FileUpload"
-import DriveInfo from "../widgets/DriveInfo";
+import FilesNavigationCard from "../widgets/FilesNavigationCard"
+import FileUploadCard from "../widgets/FileUploadCard"
+import DriveInfoCard from "../widgets/DriveInfoCard";
+import RequireUserDrive from "../features/drive/ui/RequireUserDrive";
 
 export default function FilesListPage() {
   return (
     <>
-      <h1 className="font-bold text-3xl">My Files</h1>
-      <DriveInfo className="my-2" />
-      <FileUpload/>
-      <FilesNavigation/>
+      <DriveInfoCard className="my-2" />
+      <RequireUserDrive>
+        <FileUploadCard className="my-2" />
+        <FilesNavigationCard className="my-2"/>
+      </RequireUserDrive>
     </>
   )
 }

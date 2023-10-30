@@ -21,7 +21,7 @@ function App() {
     <StrictMode>
       <StyledApp>
         <AppContainer>
-          <TonConnectButton/>
+          <TonConnectButton className="my-2" />
           <FilesListPage />
         </AppContainer>
       </StyledApp>

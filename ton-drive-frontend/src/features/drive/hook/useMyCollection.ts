@@ -1,8 +1,8 @@
 import {useTonAddress} from "@tonconnect/ui-react";
-import {useTonClient} from "../../shared/hooks/useTonClient";
+import {useTonClient} from "../../../shared/hooks/useTonClient";
 import {useEffect, useState} from "react";
-import tonDrive, {UserCollection} from "../../services/FilesService";
-import {useTonConnect} from "../../shared/hooks/useTonConnect";
+import tonDrive, {UserCollection} from "../../../services/FilesService";
+import {useTonConnect} from "../../../shared/hooks/useTonConnect";
 import {Address} from "ton-core";
 
 export function useMyCollection() {
@@ -15,6 +15,7 @@ export function useMyCollection() {
         const client = tonClient.client
 
         if (wallet == null || wallet == '' || !client) {
+            setCollection(null);
             return;
         }
         const userAddr = Address.parse(wallet)
