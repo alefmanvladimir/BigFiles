@@ -6,11 +6,17 @@ import RequireUserDrive from "../features/drive/ui/RequireUserDrive";
 export default function FilesListPage() {
   return (
     <>
-      <DriveInfoCard className="my-2" />
-      <RequireUserDrive>
-        <FileUploadCard className="my-2" />
-        <FilesNavigationCard className="my-2"/>
-      </RequireUserDrive>
+      <section className="grid items-start xl:grid-cols-[500px_1fr] gap-2 md:gap-3 xl:gap-5">
+        <div className="grid gap-2 md:gap-3 xl:gap-5">
+          <DriveInfoCard />
+          <RequireUserDrive>
+            <FileUploadCard />
+          </RequireUserDrive>
+        </div>
+        <RequireUserDrive>
+          <FilesNavigationCard />
+        </RequireUserDrive>
+      </section>
     </>
   )
 }
