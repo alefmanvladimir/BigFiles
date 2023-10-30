@@ -1,3 +1,4 @@
+import {TonConnectButton} from "@tonconnect/ui-react";
 import ContractLink from "../shared/ui/ContractLink";
 import {useRealtimeCollectionInfo} from "../features/drive/hook/useCollectionInfo";
 import {fromNano} from "ton";
@@ -23,7 +24,10 @@ export default function DriveInfoCard({className = ""}: AccountInfoProps) {
   return (
     <div className={"card card-compact bg-base-200 shadow-md " + className}>
       <div className="card-body">
-        <h2 className="card-title">My Drive</h2>
+        <div className="flex flex-wrap items-start gap-3 justify-between">
+          <h2 className="card-title">My Drive</h2>
+          <TonConnectButton />
+        </div>
         <div className="overflow-x-auto">
           {
             driveInfo ?

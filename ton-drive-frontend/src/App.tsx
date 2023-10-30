@@ -3,8 +3,7 @@ import "./App.css";
 import styled from "styled-components";
 import "@twa-dev/sdk";
 import DemoPage from "./pages/DemoPage";
-import FilesListPage from "./pages/FilesListPage";
-import {TonConnectButton} from "@tonconnect/ui-react";
+import DriveDashboard from "./pages/DriveDashboard";
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -21,8 +20,7 @@ function App() {
     <StrictMode>
       <StyledApp>
         <AppContainer>
-          <TonConnectButton className="my-2" />
-          <FilesListPage />
+          <DriveDashboard />
         </AppContainer>
       </StyledApp>
     </StrictMode>

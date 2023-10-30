@@ -3,7 +3,7 @@ import FileUploadCard from "../widgets/FileUploadCard"
 import DriveInfoCard from "../widgets/DriveInfoCard";
 import RequireUserDrive from "../features/drive/ui/RequireUserDrive";
 
-export default function FilesListPage() {
+export default function DriveDashboard() {
   return (
     <>
       <section className="grid items-start xl:grid-cols-[500px_1fr] gap-2 md:gap-3 xl:gap-5">
