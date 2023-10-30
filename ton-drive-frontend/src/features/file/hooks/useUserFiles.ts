@@ -3,6 +3,7 @@ import type {TonStorageFile} from "../../../entities/file/model/TonStorageFile";
 import {useMyCollection} from "../../drive/hook/useMyCollection";
 import { useRealtimeRemoteState } from "../../../shared/hooks/useRealtimeRemoteState";
 import { FileInfo } from "../../../services/FilesService";
+import { splitFileName } from "../../../entities/file/utils/splitFileName";
 
 export function useUserFiles(): TonStorageFile[] {
     const [files, setFiles] = useState<TonStorageFile[]>([]);
@@ -71,15 +72,4 @@ function mapFiles(files: FileInfo[]): TonStorageFile[] {
       }
     }
   })
-}
-
-function splitFileName(fileName: string): [string, string] {
-  const lastDotIndex = fileName.lastIndexOf('.');
-  if (lastDotIndex === -1) {
-    return [fileName, ''];
-  }
-  return [
-    fileName.substring(0, lastDotIndex),
-    fileName.substring(lastDotIndex + 1)
-  ];
 }
