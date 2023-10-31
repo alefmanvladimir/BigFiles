@@ -38,6 +38,37 @@ export class TonStorageService {
     }
   }
 
+  async prepareDownload(bagId: string): Promise<{ ready: boolean, filePath?: string }> {
+    const cliRes = await this.execCliCommand(`\"get ${bagId} --json\"`)
+      .catch(res => {
+          if (res.data) {
+            return res.data
+          } else {
+            return Promise.reject(res)
+          }
+        }
+      )
+    if (cliRes.match(/.+No such torrent/) !== null) {
+      await this.execCliCommand(`\"add-by-hash ${bagId}\"`)
+      return {
+        ready: false
+      }
+    }
+    const cliResParsed = JSON.parse(cliRes);
+    if (cliResParsed["torrent"]?.completed) {
+      const rootPath: string = cliResParsed["torrent"]['root_dir']
+      const fileName: string = cliResParsed["files"][0]['name']
+      return {
+        ready: true,
+        filePath: path.join(rootPath, fileName).toString()
+      };
+    } else {
+      return {
+        ready: false
+      }
+    }
+  }
+
   async createContract(bagId: string, providerAddress: string): Promise<NodeJS.ArrayBufferView> {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'create-contract'));
     const file = path.join(tempDir, 'provider-response');
@@ -88,7 +119,7 @@ export class TonStorageService {
 
       ls.on('close', (code) => {
         if (code != 0) {
-          reject(errorsOut.join(''));
+          reject({errors: errorsOut.join(''), data: consoleOut.join('')});
         }
         resolve(consoleOut.join(''));
       });
