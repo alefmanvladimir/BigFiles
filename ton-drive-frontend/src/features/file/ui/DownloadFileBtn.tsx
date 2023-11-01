@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { TonStorageFile } from "../../../entities/file/model/TonStorageFile";
+import { apiConfig } from "../../../shared/config/api";
 
 export interface DownloadFileBtnProps {
   file: TonStorageFile;
@@ -18,7 +19,7 @@ export default function DownloadFileBtn({ file, className = "", children }: Down
   function prepareLink() {
     setStatus({ready: false, downloadRequested: true, fileName: null})
     const interval = setInterval(() => {
-      fetch(`https://api.bigfiles.cloud/prepareDownload?bagId=${bagId}`, {method: 'POST'})
+      fetch(new URL(`prepareDownload?bagId=${bagId}`, apiConfig.baseUrl), {method: 'POST'})
         .then(res => res.json())
         .then(res => {
           console.log(res)
@@ -51,7 +52,7 @@ export default function DownloadFileBtn({ file, className = "", children }: Down
   if (status.ready) {
     return (
       <a
-        download href={`https://bigfiles.cloud/api/download/${bagId}/${status.fileName}`} target="_blank"
+        download href={new URL(`${bagId}/${status.fileName}`, apiConfig.baseUrl).toString()} target="_blank"
         className={`btn btn-outline btn-success ${className}`}>
         <DownloadIcon />
       </a>

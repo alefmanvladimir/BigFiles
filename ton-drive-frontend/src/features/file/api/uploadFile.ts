@@ -1,6 +1,7 @@
 import { Sender, TonClient } from "ton";
 import {Address, Cell} from "ton-core";
 import tonDrive, {storageProviderAddress} from "../../../services/FilesService";
+import { apiConfig } from "../../../shared/config/api";
 
 export interface FileUploadOptions {
   file: File;
@@ -12,8 +13,6 @@ export interface FileUploadOptions {
 }
 
 export async function uploadFile({ file, tonClient, sender, wallet }: FileUploadOptions) {
-  const host = 'https://api.bigfiles.cloud'
-
   const formData = new FormData()
   formData.append('file', file)
 
@@ -22,7 +21,7 @@ export async function uploadFile({ file, tonClient, sender, wallet }: FileUpload
       return;
   }
   const tonDriveService = tonDrive(tonClient.client!!, sender)
-  const response = await fetch(`${host}/upload`, {
+  const response = await fetch(new URL('upload', apiConfig.baseUrl), {
       method: 'POST',
       body: formData
   })
@@ -32,7 +31,7 @@ export async function uploadFile({ file, tonClient, sender, wallet }: FileUpload
   contractParams.append('bagId', bagId)
   contractParams.append('providerAddress', storageProviderAddress.toRawString())
   // TODO: use POST method body instead of query params
-  const contractResponse = await fetch(new URL('/contracts?' + contractParams.toString(), host).toString(), {
+  const contractResponse = await fetch(new URL('/contracts?' + contractParams.toString(), apiConfig.baseUrl).toString(), {
     method: 'POST'
   })
   const contractFile = await contractResponse.arrayBuffer()
