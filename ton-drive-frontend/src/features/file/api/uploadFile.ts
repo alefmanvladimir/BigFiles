@@ -31,7 +31,7 @@ export async function uploadFile({ file, tonClient, sender, wallet }: FileUpload
   contractParams.append('bagId', bagId)
   contractParams.append('providerAddress', storageProviderAddress.toRawString())
   // TODO: use POST method body instead of query params
-  const contractResponse = await fetch(new URL('/contracts?' + contractParams.toString(), apiConfig.baseUrl).toString(), {
+  const contractResponse = await fetch(new URL('contracts?' + contractParams.toString(), apiConfig.baseUrl).toString(), {
     method: 'POST'
   })
   const contractFile = await contractResponse.arrayBuffer()
