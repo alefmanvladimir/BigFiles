@@ -25,15 +25,16 @@ WORKDIR ${STORAGE_WORK_DIR}
 # Allow CLI execution
 RUN chmod +x storage-daemon-cli
 
-WORKDIR /usr/src/base/ton-drive-backend
+WORKDIR /usr/src/base
 
+# Create symlink for volume and remove frontend
 RUN ln -s /usr/src/base/ton-drive-backend /usr/src/app \
   && rm -rf /usr/src/base/ton-drive-frontend
 
 # build server
-RUN npm run build
+RUN npm run build:backend
 
 # remove dev dependencies
 RUN npm prune --production --worspace=ton-drive-backend
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:backend"]
