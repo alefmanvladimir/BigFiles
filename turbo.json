@@ -2,8 +2,13 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "build/**"]
     },
-    "lint": {}
+    "ton-drive-frontend#build": {
+      "dependsOn": ["ton-drive-contracts#build"]
+    },
+    "ton-drive-backend#build": {
+      "dependsOn": ["ton-drive-contracts#build"]
+    }
   }
 }

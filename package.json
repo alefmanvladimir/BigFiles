@@ -1,6 +1,9 @@
 {
   "name": "ton-drive",
   "private": true,
+  "scripts": {
+    "build": "turbo build"
+  },
   "workspaces": [
     "ton-drive-frontend",
     "ton-drive-backend",
