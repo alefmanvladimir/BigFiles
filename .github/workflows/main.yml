@@ -21,4 +21,4 @@ jobs:
         script: |
           cd BigFiles
           git pull --all
-          sh build.sh
+          sh ./.ci/build.sh
