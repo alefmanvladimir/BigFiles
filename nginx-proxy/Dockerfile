@@ -1,4 +1,2 @@
 FROM jwilder/nginx-proxy:0.9
-RUN { \
-      echo 'client_max_body_size 0;'; \
-    } > /etc/nginx/conf.d/my_proxy.conf
+COPY custom.conf /etc/nginx/conf.d/custom.conf
