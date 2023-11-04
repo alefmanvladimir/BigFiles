@@ -2,6 +2,9 @@
   "name": "ton-drive",
   "private": true,
   "scripts": {
+    "dev": "turbo dev",
+    "dev:frontend": "turbo ton-drive-frontend#dev",
+    "dev:backend": "turbo ton-drive-backend#dev",
     "build": "turbo build",
     "build:frontend": "turbo ton-drive-frontend#build",
     "build:backend": "turbo ton-drive-backend#build",
