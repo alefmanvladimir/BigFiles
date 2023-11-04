@@ -37,4 +37,4 @@ RUN npm run build:backend
 # remove dev dependencies
 RUN npm prune --production --worspace=ton-drive-backend
 
-CMD ["npm", "run", "start:backend"]
+CMD ["npm", "run", "start:prod", "--workspace=ton-drive-backend"]
