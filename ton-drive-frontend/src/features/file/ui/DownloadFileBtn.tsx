@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { TonStorageFile } from "../../../entities/file/model/TonStorageFile";
 import { apiConfig } from "../../../shared/config/api";
+import { prepareDownload } from "../api/prepareDownload";
 
 export interface DownloadFileBtnProps {
   file: TonStorageFile;
@@ -10,36 +11,34 @@ export interface DownloadFileBtnProps {
 
 export default function DownloadFileBtn({ file, className = "", children }: DownloadFileBtnProps) {
   const { bagId } = file
-  const [status, setStatus] = useState({
-    ready: false,
-    downloadRequested: false,
-    fileName: null
-  })
-
+  // By default, we assume that the file is not ready to download
+  const [isReady, setIsReady] = useState(false)
+  // By default, we assume that the file exists
+  const [isExists, setIsExists] = useState(true)
+  const [isDownloadRequested, setIsDownloadRequested] = useState(false)
+  const [fileDownloadName, setFileDownloadName] = useState<string | null>(null)
   function prepareLink() {
-    setStatus({ready: false, downloadRequested: true, fileName: null})
-    const interval = setInterval(() => {
-      fetch(new URL(`prepareDownload?bagId=${bagId}`, apiConfig.baseUrl), {method: 'POST'})
-        .then(res => res.json())
-        .then(res => {
-          console.log(res)
-          if (res.ready) {
-            setStatus({
-              ready: true,
-              downloadRequested: false,
-              fileName: res.fileName
-            });
-            clearInterval(interval);
-          }
-        })
-        .catch(() => {
-          setStatus({
-            downloadRequested: false,
-            fileName: null,
-            ready: false
-          })
+    setIsDownloadRequested(true)
+    const interval = setInterval(async () => {
+      try {
+        const response = await prepareDownload(bagId)
+        if (response.ready) {
+          setIsReady(true)
+          setIsDownloadRequested(false)
+          setFileDownloadName(response.fileName)
           clearInterval(interval)
-        })
+        }
+        if (!response.exists) {
+          setIsExists(false)
+          setIsDownloadRequested(false)
+          clearInterval(interval)
+        }
+      } catch (err) {
+        console.error(err)
+        setIsDownloadRequested(false)
+        setIsExists(false)
+        clearInterval(interval)
+      }
     }, 2000)
     return interval
   }
@@ -49,17 +48,30 @@ export default function DownloadFileBtn({ file, className = "", children }: Down
     return () => clearInterval(interval)
   }, [file])
 
-  if (status.ready) {
+  if (!isExists) {
+    return (
+      <div className="tooltip tooltip-error tooltip-left" data-tip="File does not exist">
+        <button disabled className={`btn btn-outline btn-disabled ${className}`}>
+          {/* exclamation-triangle */}
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+
+  if (isReady) {
     return (
       <a
-        download href={new URL(`${bagId}/${status.fileName}`, apiConfig.baseUrl).toString()} target="_blank"
+        download href={new URL(`${bagId}/${fileDownloadName}`, apiConfig.baseUrl).toString()} target="_blank"
         className={`btn btn-outline btn-success ${className}`}>
         <DownloadIcon />
       </a>
     )
   }
 
-  if (status.downloadRequested) {
+  if (isDownloadRequested) {
     return (
       <div className={`btn btn-outline btn-disabled ${className}`}>
         <span className="loading loading-bars loading-sm" />

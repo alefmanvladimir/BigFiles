@@ -5,6 +5,13 @@ import * as os from 'os';
 import * as path from 'path';
 import * as process from 'process';
 
+interface PrepareDownloadResponse {
+  ready: boolean
+  exists: boolean
+  filePath?: string
+  _output?: string | object
+}
+
 @Injectable()
 export class TonStorageService {
 
@@ -38,33 +45,45 @@ export class TonStorageService {
     }
   }
 
-  async prepareDownload(bagId: string): Promise<{ ready: boolean, filePath?: string }> {
-    const cliRes = await this.execCliCommand(`\"get ${bagId} --json\"`)
-      .catch(res => {
-          if (res.data) {
-            return res.data
-          } else {
-            return Promise.reject(res)
-          }
+  async prepareDownload(bagId: string): Promise<PrepareDownloadResponse> {
+    try {
+      const cliRes = await this.execCliCommand(`\"get ${bagId} --json\"`)
+      const cliResParsed = JSON.parse(cliRes);
+      // if bag not found, try to add it
+      if (cliRes.match(/.+No such torrent/) !== null) {
+        const output = await this.execCliCommand(`\"add-by-hash ${bagId}\"`)
+        return {
+          ready: false,
+          exists: false,
+          _output: output
         }
-      )
-    if (cliRes.match(/.+No such torrent/) !== null) {
-      await this.execCliCommand(`\"add-by-hash ${bagId}\"`)
-      return {
-        ready: false
       }
-    }
-    const cliResParsed = JSON.parse(cliRes);
-    if (cliResParsed["torrent"]?.completed) {
-      const rootPath: string = cliResParsed["torrent"]['root_dir']
-      const fileName: string = cliResParsed["files"][0]['name']
+      // if bag is found and ready to download
+      if (cliResParsed["torrent"]?.completed) {
+        const rootPath: string = cliResParsed["torrent"]['root_dir']
+        const fileName: string = cliResParsed["files"][0]['name']
+        return {
+          ready: true,
+          exists: true,
+          filePath: path.join(rootPath, fileName).toString(),
+          _output: cliResParsed
+        };
+      }
+      // in any other case
       return {
-        ready: true,
-        filePath: path.join(rootPath, fileName).toString()
-      };
-    } else {
-      return {
-        ready: false
+        ready: false,
+        exists: true,
+        _output: cliResParsed
+      }
+    } catch (e) {
+      if (e.data) {
+        return {
+          ready: false,
+          exists: false,
+          _output: e.data
+        }
+      } else {
+        return Promise.reject(e)
       }
     }
   }
