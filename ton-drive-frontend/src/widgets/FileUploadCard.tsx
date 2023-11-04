@@ -6,13 +6,16 @@ import {useTonAddress} from "@tonconnect/ui-react";
 import { uploadFile } from "../features/file/api/uploadFile";
 import FileTypeIcon from "../entities/file/ui/FileTypeIcon";
 import { splitFileName } from "../entities/file/utils/splitFileName";
+import { createFileContract } from "../features/file/api/createFileContract";
 
 export interface FileUploadProps {
     className?: string;
 }
 
 export default function FileUpload({className = ''}: FileUploadProps) {
-  const [isFetching, setIsFetching] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [isCreatingContract, setIsCreatingContract] = useState(false)
+  const isFetching = isUploading || isCreatingContract
   const tonClient = useTonClient()
   const sender = useTonConnect().sender
   const wallet = useTonAddress()
@@ -22,7 +25,7 @@ export default function FileUpload({className = ''}: FileUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  function handleReset(e: FormEvent<HTMLFormElement>) {
+  function handleReset(e?: FormEvent<HTMLFormElement>) {
     if (fileInputRef.current == null) {
       return
     }
@@ -49,23 +52,24 @@ export default function FileUpload({className = ''}: FileUploadProps) {
     const file = formData.get('file')
 
     if (file == null) {
-        console.error("File not chosen")
-        return;
+      throw new Error("File not chosen")
     }
 
     if (!(file instanceof File)) {
-      console.error('File is not instance of File', file)
-      return
+      throw new Error(`File is not instance of File: ${file}`)
     }
 
     if (file.size === 0) {
-      console.error('File is empty')
-      return
+      throw new Error('File is empty')
     }
 
-    setIsFetching(true)
-    await uploadFile({ tonClient, sender, wallet, file })
-    setIsFetching(false)
+    setIsUploading(true)
+    const bagId = await uploadFile(file)
+    setIsUploading(false)
+    setIsCreatingContract(true)
+    await createFileContract({ tonClient, bagId, sender, wallet, file })
+    setIsCreatingContract(false)
+    handleReset()
   }
 
   return (
@@ -106,7 +110,7 @@ export default function FileUpload({className = ''}: FileUploadProps) {
           <button type='submit' disabled={isFetching || !fileString}
             className={`btn btn-accent btn-outline btn-sm ${isFetching || !fileString ? 'btn-disabled' : ''}`}>
             {
-              isFetching ? 'Uploading...' : 'Upload'
+              isUploading ? 'Uploading...' : isCreatingContract ? 'Creating contract...' : 'Upload'
             }
           </button>
         </div>
