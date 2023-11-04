@@ -36,13 +36,11 @@ export class AppController {
     const status = await this.tonStorageService.prepareDownload(bagId)
     if (status.ready) {
       return {
-        ready: true,
+        ...status,
         fileName: path.parse(status.filePath).base
       }
     } else {
-      return {
-        ready: false
-      }
+      return status
     }
   }
 
