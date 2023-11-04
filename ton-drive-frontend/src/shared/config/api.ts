@@ -1,3 +1,3 @@
 export const apiConfig = {
-  baseUrl: new URL('http://localhost:3000/'),
+  baseUrl: new URL('https://bigfiles.cloud/api/'),
 }
