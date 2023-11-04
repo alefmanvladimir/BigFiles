@@ -28,4 +28,4 @@ RUN wget https://ton-blockchain.github.io/global.config.json
 RUN chmod +x storage-daemon-cli \
   && chmod +x storage-daemon
 
-CMD ./storage-daemon -v 3 -C global.config.json -I 0.0.0.0:3333 -p 5555 -D storage-db
+CMD ./storage-daemon -v 3 -C global.config.json -I 185.35.144.74:3333 -p 5555 -D storage-db
