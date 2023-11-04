@@ -3,6 +3,10 @@ FROM node:20-alpine
 WORKDIR /usr/src/base
 
 COPY package.json package-lock.json ./
+# TODO: Create more elegant solution for this
+COPY ton-drive-backend/package.json ./ton-drive-backend/
+COPY ton-drive-frontend/package.json ./ton-drive-frontend/
+COPY ton-drive-contracts/package.json ./ton-drive-contracts/
 
 # npm ci is used to install dependencies from package-lock.json
 # it saves time on calculating dependencies tree
