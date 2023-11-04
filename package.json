@@ -1,6 +1,16 @@
 {
   "name": "ton-drive",
   "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:frontend": "turbo ton-drive-frontend#dev",
+    "dev:backend": "turbo ton-drive-backend#dev",
+    "build": "turbo build",
+    "build:frontend": "turbo ton-drive-frontend#build",
+    "build:backend": "turbo ton-drive-backend#build",
+    "build:contracts": "turbo ton-drive-contracts#build",
+    "start:backend": "turbo ton-drive-backend#start:prod"
+  },
   "workspaces": [
     "ton-drive-frontend",
     "ton-drive-backend",

@@ -1,0 +1,11 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/base
+
+COPY package.json package-lock.json ./
+
+# npm ci is used to install dependencies from package-lock.json
+# it saves time on calculating dependencies tree
+RUN npm ci
+
+COPY . .

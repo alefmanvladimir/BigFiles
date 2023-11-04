@@ -1,9 +1,30 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build": {
-      "outputs": ["dist/**"]
+    "dev": {
+      "persistent": true,
+      "cache": false
     },
-    "lint": {}
+    "ton-drive-frontend#dev": {
+      "dependsOn": ["ton-drive-contracts#build"]
+    },
+    "ton-drive-backend#dev": {
+      "dependsOn": []
+    },
+    "build": {
+      "outputs": ["dist/**", "build/**"]
+    },
+    "ton-drive-frontend#build": {
+      "dependsOn": ["ton-drive-contracts#build"]
+    },
+    "ton-drive-backend#build": {
+      "dependsOn": []
+    },
+    "ton-drive-contracts#build": {},
+    "ton-drive-backend#start:prod": {
+      "persistent": true,
+      "cache": false,
+      "dependsOn": ["ton-drive-backend#build"]
+    }
   }
 }

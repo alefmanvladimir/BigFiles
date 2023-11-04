@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM bigfiles-base
 
 EXPOSE 3000
 
@@ -25,19 +25,16 @@ WORKDIR ${STORAGE_WORK_DIR}
 # Allow CLI execution
 RUN chmod +x storage-daemon-cli
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/base
 
-# install dependencies
-COPY package.json ./
-RUN npm install
-
-# copy source code
-COPY . .
+# Create symlink for volume and remove frontend
+RUN ln -s /usr/src/base/ton-drive-backend /usr/src/app \
+  && rm -rf /usr/src/base/ton-drive-frontend
 
 # build server
-RUN npm run build
+RUN npm run build:backend
 
 # remove dev dependencies
-RUN npm prune --production
+RUN npm prune --production --worspace=ton-drive-backend
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod", "--workspace=ton-drive-backend"]
