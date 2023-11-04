@@ -3,7 +3,7 @@ version: "3.8"
 services:
   nginx-proxy:
     container_name: nginx-proxy
-    image: jwilder/nginx-proxy:0.9
+    build: .
     restart: always
     tty: true
     ports:
