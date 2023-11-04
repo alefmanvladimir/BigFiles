@@ -51,18 +51,17 @@ export class TonStorageService {
       const cliResParsed = JSON.parse(cliRes);
 
       const noSuchTorrent = cliRes.match(/.+No such torrent/) !== null;
-      const knownButNotDownloaded = cliResParsed["torrent"]?.downloaded_size === '0';
       // if bag not found, try to add it
-      if (noSuchTorrent || knownButNotDownloaded) {
+      if (noSuchTorrent) {
         const output = await this.execCliCommand(`\"add-by-hash ${bagId}\"`)
         return {
           ready: false,
-          exists: knownButNotDownloaded,
+          exists: false,
           _output: output
         }
       }
       // if bag is found and ready to download
-      if (cliResParsed["torrent"]?.completed) {
+      if (cliResParsed["torrent"]?.active_upload) {
         const rootPath: string = cliResParsed["torrent"]['root_dir']
         const fileName: string = cliResParsed["files"][0]['name']
         return {
