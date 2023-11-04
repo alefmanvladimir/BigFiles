@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { TonStorageFile } from "../../../entities/file/model/TonStorageFile";
-import { apiConfig } from "../../../shared/config/api";
 import { prepareDownload } from "../api/prepareDownload";
+import { getDownloadLink } from "../api/getDownloadLink";
 
 export interface DownloadFileBtnProps {
   file: TonStorageFile;
@@ -44,6 +44,9 @@ export default function DownloadFileBtn({ file, className = "", children }: Down
   }
 
   useEffect(() => {
+    setIsReady(false)
+    setIsExists(true)
+    setFileDownloadName(null)
     const interval = prepareLink()
     return () => clearInterval(interval)
   }, [file])
@@ -61,10 +64,10 @@ export default function DownloadFileBtn({ file, className = "", children }: Down
     )
   }
 
-  if (isReady) {
+  if (isReady && fileDownloadName) {
     return (
       <a
-        download href={new URL(`${bagId}/${fileDownloadName}`, apiConfig.baseUrl).toString()} target="_blank"
+        download href={getDownloadLink(bagId, fileDownloadName)} target="_blank"
         className={`btn btn-outline btn-success ${className}`}>
         <DownloadIcon />
       </a>
