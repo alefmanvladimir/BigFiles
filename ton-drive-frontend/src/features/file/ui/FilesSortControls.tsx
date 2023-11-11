@@ -48,7 +48,7 @@ export default function FilesSortControls({ files, onSort, className = '' }: Fil
         {
           buttons.map((buttonModel) => (
             <button key={buttonModel.sortAttribute}
-                    className={`btn btn-sm btn-outline sm:btn-md join-item ${sortAttribute === buttonModel.sortAttribute ? 'btn-active btn-accent' : ''}`}
+                    className={`btn btn-xs sm:btn-sm md:btn-md btn-outline join-item ${sortAttribute === buttonModel.sortAttribute ? 'btn-active btn-accent' : ''}`}
                     onClick={() => onButtonClick(buttonModel.sortAttribute)}>
               <SortOrderIcon asc={getAsc(buttonModel.sortAttribute)} /> {buttonModel.text}
             </button>
