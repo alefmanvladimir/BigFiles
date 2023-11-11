@@ -7,7 +7,7 @@ services:
       - "5555:5555"
     volumes:
       - .docker-volumes/ton-storage/:/usr/ton-storage/storage-db/:rw
-      - .docker-volumes/upload:/usr/src/app/.upload/:ro
+      - .docker-volumes/upload:/usr/src/app/ton-drive-backend/.upload/:ro
     networks:
       - web
 
@@ -17,7 +17,7 @@ services:
     restart: always
     volumes:
       - .docker-volumes/ton-storage/:/usr/ton-storage/storage-db/:ro
-      - .docker-volumes/upload/:/usr/src/app/.upload/:rw
+      - .docker-volumes/upload/:/usr/src/app/ton-drive-backend/.upload/:rw
     environment:
       TON_STORAGE_HOST: storage
       STORAGE_CLI_EXEC_PATH: ./storage-daemon-cli
