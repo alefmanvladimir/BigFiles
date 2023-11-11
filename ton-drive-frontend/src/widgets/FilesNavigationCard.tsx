@@ -39,19 +39,19 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
 
   return (
     <>
-      <div className={`card card-compact sm:card-normal bg-base-200 ${className}`}>
-        <div className="card-body">
-          <h2 className="card-title">Files</h2>
-          <div className="flex gap-2 flex-wrap flex-col sm:flex-row">
-            <FilesSearchBox files={dataToFilter} onSearch={onFilter}/>
-            <FilesSortControls files={dataToSort} onSort={onSort}/>
+      <div className="overflow-x-auto">
+        <div className={`card card-compact sm:card-normal bg-base-200 ${className}`}>
+          <div className="card-body">
+            <h2 className="card-title">Files</h2>
+            <div className="flex gap-2 flex-wrap flex-col sm:flex-row">
+              <FilesSearchBox files={dataToFilter} onSearch={onFilter} />
+              <FilesSortControls files={dataToSort} onSort={onSort} />
+            </div>
+            <FilesTable className="table-sm sm:table-md" files={files} onChooseFile={chooseFile} />
           </div>
-          <FilesTable className="table-sm sm:table-md" files={files} onChooseFile={chooseFile}/>
         </div>
       </div>
-      {
-        <FileModalWithActions ref={modalRef} file={selectedFile}/>
-      }
+      {<FileModalWithActions ref={modalRef} file={selectedFile} />}
     </>
-  )
+  );
 }
