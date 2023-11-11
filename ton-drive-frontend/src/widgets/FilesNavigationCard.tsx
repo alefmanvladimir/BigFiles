@@ -45,7 +45,7 @@ export default function FilesNavigationCard({className = ""}: FilesNavigationPro
             <h2 className="card-title">Files</h2>
             <div className="flex gap-2 flex-wrap flex-col sm:flex-row">
               <FilesSearchBox files={dataToFilter} onSearch={onFilter} />
-              <FilesSortControls files={dataToSort} onSort={onSort} />
+              <FilesSortControls files={dataToSort} onSort={onSort} className="join-vertical sm:join-horizontal" />
             </div>
             <FilesTable className="table-sm sm:table-md" files={files} onChooseFile={chooseFile} />
           </div>
