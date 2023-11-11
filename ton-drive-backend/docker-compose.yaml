@@ -7,7 +7,7 @@ services:
       - "5555:5555"
     volumes:
       - .docker-volumes/ton-storage/:/usr/ton-storage/storage-db/:rw
-      - .docker-volumes/upload:/usr/src/app/.upload/:ro
+      - .docker-volumes/upload:/usr/src/base/ton-drive-backend/.upload/:ro
     networks:
       - web
 
