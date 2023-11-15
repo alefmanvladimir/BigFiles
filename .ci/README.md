@@ -8,6 +8,20 @@ Part of the configuration is done manually.
 
 > **Note:** pay attention to manual configuration when updating the CI.
 
+### Generate keygen in local machine
+In your local machine, execute the following command in the terminal and generate your ssh-keygen.
+
+> ssh-keygen -f ~/.ssh/yourhost -t ed25519 -b 4096 -C "youremail@example.com"
+
+**Copy our public key to the remote server’s authorize**
+> ### goto remote server
+> echo "your public keygen content" >> .ssh/authorized_keys
+
+**Copy our Private Key and paste it into Github Secrets.**
+> **Note:** Go to “Settings” > “Secrets”, and click “New repository secret” button.
+
+> **HOST:** your host address **KEY_ED25519:** past your private keygen content **PORT:** your ssh port, default is 22 **USERNAME:** your ssh login username
+
 ### Main NGINX proxy
 
 Folder `.ci/nginx-proxy` contains the configuration for the main NGINX proxy with sertificates. It is built and run on the host machine manually. It watches for the new containers and automatically adds them to the proxy configuration.
